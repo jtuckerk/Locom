@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -32,6 +33,9 @@ public class MainActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        connect();
+
         return true;
     }
 
@@ -52,12 +56,12 @@ public class MainActivity extends ActionBarActivity {
 
 
     // TAG for logging
-    private static final String TAG = "TTTActivity";
+    private static final String TAG = "LocomMainActivity";
     private static final String groupName = "@kirvenPickens2";
 
 
     // server to connect to
-    protected static final int GROUPCAST_PORT = 20000;
+    protected static final int GROUPCAST_PORT = 2000;
     protected static final String GROUPCAST_SERVER = "52.11.228.217";
 
     // networking
@@ -133,7 +137,7 @@ public class MainActivity extends ActionBarActivity {
                 Log.i(TAG, "Connect task started");
                 try {
                     connected = false;
-                    socket = new Socket(GROUPCAST_SERVER, GROUPCAST_PORT);
+                    socket = new Socket(InetAddress.getByName(GROUPCAST_SERVER), GROUPCAST_PORT);
                     Log.i(TAG, "Socket created");
                     in = new BufferedReader(new InputStreamReader(
                             socket.getInputStream()));
