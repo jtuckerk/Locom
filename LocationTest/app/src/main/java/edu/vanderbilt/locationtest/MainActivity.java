@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -28,27 +30,57 @@ public class MainActivity extends ActionBarActivity
     private static final String TAG = "MainActivity";
     GoogleApiClient mGoogleApiClient = null;
     Location mLastLocation;
-    //TextView mLatitudeText = (TextView) this.findViewById(R.id.mLatitudeText);
-   // TextView mLongitudeText = (TextView) this.findViewById(R.id.mLongitudeText);
+//    TextView mLatitudeTextLabel = (TextView) this.findViewById(R.id.mLatitudeText);
+  // TextView mLongitudeTextLabel = (TextView) this.findViewById(R.id.mLongitudeText);
     String mLatitudeText = "";
     String mLongitudeText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       super.onCreate(savedInstanceState);
-       setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-       // protected synchronized void buildGoogleApiClient() {
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
+    buildGoogleApiClient();
+
+        mGoogleApiClient.connect();
+
+
+            if (mLastLocation != null) {
+                //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+                mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+                // mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                mLongitudeText = String.valueOf(mLastLocation.getLongitude());
+            }
+            Log.i(TAG, "Latitude" + mLatitudeText);
+            Log.i(TAG, "Longitude" + mLongitudeText);
+
+        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+
+        } else {
+            Log.e(TAG, "unable to connect to google play services.");
+            Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
+
+        }
+        while(true){
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (mLastLocation != null) {
+                //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+                mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+                // mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                mLongitudeText = String.valueOf(mLastLocation.getLongitude());
+            }
+            Log.i(TAG, "Latitude" + mLatitudeText);
+            Log.i(TAG, "Longitude" + mLongitudeText);
+        }
+    }
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-        //}
-
-        mGoogleApiClient.connect();
     }
-
    @Override
     public void onConnected(Bundle connectionHint) {
         // Connected to Google Play services!
