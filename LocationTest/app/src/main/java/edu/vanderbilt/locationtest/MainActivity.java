@@ -29,9 +29,10 @@ public class MainActivity extends ActionBarActivity
 
     private static final String TAG = "MainActivity";
     GoogleApiClient mGoogleApiClient = null;
+
     Location mLastLocation;
-//    TextView mLatitudeTextLabel = (TextView) this.findViewById(R.id.mLatitudeText);
-  // TextView mLongitudeTextLabel = (TextView) this.findViewById(R.id.mLongitudeText);
+    // TextView mLatitudeTextLabel = (TextView) this.findViewById(R.id.mLatitudeTextLabel);
+     //TextView mLongitudeTextLabel = (TextView) this.findViewById(R.id.mLongitudeTextLabel);
     String mLatitudeText = "";
     String mLongitudeText = "";
 
@@ -61,18 +62,20 @@ public class MainActivity extends ActionBarActivity
             Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
 
         }
-        while(true){
+        //while(true){
+
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                     mGoogleApiClient);
+
             if (mLastLocation != null) {
-                //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
+               // mLatitudeTextLabel.setText(String.valueOf(mLastLocation.getLatitude()));
                 mLatitudeText = String.valueOf(mLastLocation.getLatitude());
-                // mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
+                //mLongitudeTextLabel.setText(String.valueOf(mLastLocation.getLongitude()));
                 mLongitudeText = String.valueOf(mLastLocation.getLongitude());
             }
             Log.i(TAG, "Latitude" + mLatitudeText);
             Log.i(TAG, "Longitude" + mLongitudeText);
-        }
+        //}
     }
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
