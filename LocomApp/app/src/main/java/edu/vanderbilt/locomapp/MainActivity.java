@@ -67,8 +67,8 @@ public class MainActivity extends ActionBarActivity
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
         }
-        Log.i(TAG, "Latitude" + mLatitudeText);
-        Log.i(TAG, "Longitude" + mLongitudeText);
+        Log.i(TAG, "Latitude1" + mLatitudeText);
+        Log.i(TAG, "Longitude1" + mLongitudeText);
 
         if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
 
@@ -85,8 +85,8 @@ public class MainActivity extends ActionBarActivity
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
         }
-        Log.i(TAG, "Latitude" + mLatitudeText);
-        Log.i(TAG, "Longitude" + mLongitudeText);
+        Log.i(TAG, "Latitude2" + mLatitudeText);
+        Log.i(TAG, "Longitude2" + mLongitudeText);
 
         send(mLatitudeText + " " + mLongitudeText); 
     }
@@ -331,8 +331,8 @@ public class MainActivity extends ActionBarActivity
             // mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
         }
-        Log.i(TAG, "Latitude" + mLatitudeText);
-        Log.i(TAG, "Longitude" + mLongitudeText);
+        Log.i(TAG, "Latitude3" + mLatitudeText);
+        Log.i(TAG, "Longitude3" + mLongitudeText);
     }
 
     @Override
