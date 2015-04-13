@@ -1,10 +1,20 @@
 # Locom
 
-WiP	- Code, description of work done, and to-do items 
+WiP	
+Description of work done: 
 - frontend 
   - LocomApp: combines LocationTest and LocomServerTestApp - code added
   - discussed UI/graphics design - slides added
 - backend
+  - discussed server (notes below) and communication between frontend and backend 
+
+To-do items:
+- finish frontend
+- implement UI
+- implement backend
+- combine frontend and backend 
+
+Other notes: 
 - Server:
   - main thread: waits for connections 
   - serving thread: 
