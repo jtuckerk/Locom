@@ -30,23 +30,27 @@ public class MainActivity extends ActionBarActivity
 
     // Request code to use when launching the resolution activity
     private static final int REQUEST_RESOLVE_ERROR = 1001;
+
     // Unique tag for the error dialog fragment
     //private static final String DIALOG_ERROR = "dialog_error";
+
     // Bool to track whether the app is already resolving an error
     private boolean mResolvingError = false;
 
+    // TAG for logging
     private static final String TAG = "MainActivity";
 
+    // Google play
     GoogleApiClient mGoogleApiClient = null;
 
+    // store location, latitude, and longitude
     Location mLastLocation;
-
     String mLatitudeText = "";
     String mLongitudeText = "";
 
-    // server to connect to
-    protected static final int GROUPCAST_PORT = 2000;
-    protected static final String GROUPCAST_SERVER = "52.11.228.217";
+    // server to connect to (commented out - for testing with groupcast)
+    protected static final int PORT = 2000; //20000;
+    protected static final String SERVER = "52.11.228.217"; //"cs283.hopto.org";
 
     // networking
     Socket socket = null;
@@ -54,41 +58,52 @@ public class MainActivity extends ActionBarActivity
     PrintWriter out = null;
     boolean connected = false;
 
+    // UI elements
+    // any UI elements defined here
+    // for example
+    // Button button1 = null;
+    // EditText et = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // find UI elements defined in xml
+        // for ex
+        // button1 = (Button) this.findViewById(R.id.button1);
+
+        // any other initial state
+        // for example, hideBoard() from ttt
+
+        // assign OnClickListener to button example
+        /*
+        bConnect.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String name = etName.getText().toString();
+                // sanity check: make sure that the name does not start with an @ character
+                if (name == null || name.startsWith("@")) {
+                    Toast.makeText(getApplicationContext(), "Invalid name",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    send("NAME,"+etName.getText());
+
+                    // send message to join/create group
+                    // I'm Os, you are Xs
+                    send("join,@kirvenPickens2,2");
+                }
+            }
+        });
+        */
+
         buildGoogleApiClient();
 
         mGoogleApiClient.connect();
 
-        if (mLastLocation != null) {
-            mLatitudeText = String.valueOf(mLastLocation.getLatitude());
-            mLongitudeText = String.valueOf(mLastLocation.getLongitude());
-        }
-        Log.i(TAG, "Latitude" + mLatitudeText);
-        Log.i(TAG, "Longitude" + mLongitudeText);
+        connect();
 
-        if (GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-
-        } else {
-            Log.e(TAG, "unable to connect to google play services.");
-            Toast.makeText(getApplicationContext(), "not connected", Toast.LENGTH_LONG).show();
-
-        }
-
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-
-        if (mLastLocation != null) {
-            mLatitudeText = String.valueOf(mLastLocation.getLatitude());
-            mLongitudeText = String.valueOf(mLastLocation.getLongitude());
-        }
-        Log.i(TAG, "Latitude" + mLatitudeText);
-        Log.i(TAG, "Longitude" + mLongitudeText);
-
-        send(mLatitudeText + " " + mLongitudeText); 
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -103,8 +118,6 @@ public class MainActivity extends ActionBarActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        connect();
 
         return true;
     }
@@ -123,17 +136,6 @@ public class MainActivity extends ActionBarActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-    // assign a common OnClickListener to all board buttons
-    View.OnClickListener boardClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-
-        }
-
-    };
-
 
     @Override
     protected void onDestroy() {
@@ -158,7 +160,7 @@ public class MainActivity extends ActionBarActivity
                 Log.i(TAG, "Connect task started");
                 try {
                     connected = false;
-                    socket = new Socket(InetAddress.getByName(GROUPCAST_SERVER), GROUPCAST_PORT);
+                    socket = new Socket(InetAddress.getByName(SERVER), PORT);
                     Log.i(TAG, "Socket created");
                     in = new BufferedReader(new InputStreamReader(
                             socket.getInputStream()));
@@ -194,6 +196,10 @@ public class MainActivity extends ActionBarActivity
                     // start receiving
                     receive();
 
+                    /////////////// for testing with groupcast server //////////////
+                    send("NAME,locom");
+                    send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+
                 } else {
                     Toast.makeText(getApplicationContext(),
                             "Error: " + errorMsg, Toast.LENGTH_SHORT).show();
@@ -221,8 +227,7 @@ public class MainActivity extends ActionBarActivity
 
                         String msg = in.readLine();
 
-                        if (msg == null) { // other side closed the
-                            // connection
+                        if (msg == null) { // other side closed the connection
                             break;
                         }
                         publishProgress(msg);
@@ -254,6 +259,20 @@ public class MainActivity extends ActionBarActivity
 
                 // if we haven't returned yet, tell the user that we have an unhandled message
                 Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
+
+                //////// for testing with groupcast ///////
+                if(msg.startsWith("+OK,NAME")) {
+
+                    return;
+                }
+                if(msg.startsWith("+MSG")) {
+                    Log.i(TAG, "you received message from server " + msg );
+                    return;
+                }
+                if(msg.startsWith("+OK,MSG")) {
+                    Log.i(TAG, "server received your message");
+                    return;
+                }
             }
 
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -322,17 +341,20 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onConnected(Bundle bundle) {
         // Connected to Google Play services!
-        // good stuff
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
         if (mLastLocation != null) {
-            //mLatitudeText.setText(String.valueOf(mLastLocation.getLatitude()));
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
-            // mLongitudeText.setText(String.valueOf(mLastLocation.getLongitude()));
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
         }
-        Log.i(TAG, "Latitude" + mLatitudeText);
-        Log.i(TAG, "Longitude" + mLongitudeText);
+        Log.i(TAG, "Latitude " + mLatitudeText);
+        Log.i(TAG, "Longitude " + mLongitudeText);
+
+        // send server latitude and longitude
+        if (connected) {
+            send("NAME,locom");
+            send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+        }
     }
 
     @Override
@@ -363,7 +385,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (!mResolvingError) {  // more about this later
+        if (!mResolvingError) {
             mGoogleApiClient.connect();
         }
     }

@@ -4,6 +4,10 @@ WiP
 Description of work done: 
 - frontend 
   - LocomApp: combines LocationTest and LocomServerTestApp - code added
+    - connects to server (AWS) 
+    - prints latitude/longitude of device 
+    - tested with groupcast server: able to send and receive 1-lined messages (strings)
+      - commented out in code 
   - discussed UI/graphics design - slides added
 - backend
   - discussed server (notes below) and communication between frontend and backend 
@@ -12,7 +16,7 @@ To-do items:
 - finish frontend
 - implement UI
 - implement backend
-- combine frontend and backend 
+- combine frontend and backend, communication between
 
 Other notes: 
 - Server:
@@ -26,7 +30,7 @@ Other notes:
     - server queue
     - each thread has individual queue 
 
-Message format: json object - dictionary 
+Possible message format: json object - dictionary 
 example- 
 message protocol: JSON 
 {“type”:“connect”, “username”:“user”, “location”: [long, lat], “tags”:[“food”, “party”]}

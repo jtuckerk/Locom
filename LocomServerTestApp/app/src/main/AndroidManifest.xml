@@ -3,11 +3,16 @@
     package="com.example.tuckerkirven.locomservertestapp" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5a81d519e9a6ff9ee90f18f8f5be390c6418be05
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >

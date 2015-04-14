@@ -11,13 +11,25 @@ import java.util.StringTokenizer;
 public class WorkerThread extends Thread{
 
     private Socket s;
-    private Users users;
+    
+    //contains structure holding all connected users
+    private Users AppUsers;
+    
+    //structure containing all past broadcasts that haven't timed out.
     private Broadcasts broadcasts;
+    
+    //contians the user informartion for the user connected to this thread
+    //User info: location
+    //		 tags
+    //       	 username
+    private User user;
+
 
     public WorkerThread(Socket s, Users users, Broadcasts broadcasts) {
 	this.s = s;
 	this.users = users;
-		
+	this.broadcasts = broadcasts
+	
 	System.out.println("Workerthread created: " + this.getId());
     }
 
