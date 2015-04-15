@@ -9,8 +9,9 @@ public class Broadcasts {
 	private Set<Broadcast> broadcasts = new HashSet<Broadcast>();
 	
 	public Broadcasts(){
-		Broadcast welcomeBroadcast = new Broadcast("Welcome", "You are now connected", new Date(), new Date());
-		this.broadcasts.add(welcomeBroadcast);
+		
+		//Broadcast welcomeBroadcast = new Broadcast("Welcome", "You are now connected", new Date(), new Date());
+		//this.broadcasts.add(welcomeBroadcast);
 	}
 	
 	public void add(Broadcast broadcast){

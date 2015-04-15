@@ -43,7 +43,7 @@ public class UserThread extends Thread {
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("User Connection fail ");
 			e.printStackTrace();
 		} finally {
 			try {
@@ -97,6 +97,7 @@ public class UserThread extends Thread {
 					} else {
 						// handle requests
 						String message;
+						messageHandle(line);
 						StringTokenizer tokens = new StringTokenizer(line);
 						outStream.println(message = parseRequest(tokens));
 						System.out.println(message);
@@ -120,6 +121,44 @@ public class UserThread extends Thread {
 		System.out.println("Workerthread exited: " + this.getId());
 	}
 
+	public void messageHandle(String msg){
+		Gson gson = new Gson();
+		LocomGSON message = gson.fromJson(msg, LocomGSON.class);
+		
+		switch (message.type){
+		case "connect":
+			connect(message.connect.user);
+		case "update":
+			update(message.update.user);
+		case "broadcast":
+			broadcast(message.broadcast, msg);
+		}
+	}
+	
+	public void connect(User connectUser){
+		System.out.println("connecting user: " );
+		this.user = new User(connectUser.userName, connectUser.location, connectUser.tags, this.user.outStream);
+
+		
+	}
+	public void update(User upUser){
+		System.out.println("updating user: " );
+		
+		//@@checking?
+		this.user = new User(upUser.userName, upUser.location, upUser.tags, this.user.outStream);
+		
+	}
+	public void broadcast(Broadcast receivedcast, String msg){
+		System.out.println("broadcast recieved " );
+		
+		this.broadcasts.add(receivedcast);
+		
+		for (User u: this.AppUsers.users){
+			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius())){
+				u.send(msg);
+			}
+		}
+	}
 	public void parseJson(){
 		//serialize
 		Gson gson = new Gson();

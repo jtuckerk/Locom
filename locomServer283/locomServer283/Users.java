@@ -5,7 +5,7 @@ import java.util.Set;
 
 public class Users {
 
-	private Set<User> users = new HashSet<User>();
+	public Set<User> users = new HashSet<User>();
 	
 	public Users(){
 		//no op

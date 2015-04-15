@@ -6,10 +6,11 @@ import java.net.Socket;
 
 public class User {
 
-	private String userName;
-	private Location location;
-	private InterestTags tags;
-	private PrintWriter outStream;
+	public String userName;
+	public Location location;
+	public InterestTags tags;
+	public PrintWriter outStream;
+	//@@ maybe not public
 	
     public User(String userName, Location location, InterestTags tags, PrintWriter outStream) {
 	this.userName = userName;
@@ -24,7 +25,7 @@ public class User {
     	return this.userName;
     }
     
-    public Boolean inRange(Location location, int radius){
+    public Boolean inRange(Location location, double radius){
 		
     	return this.location.inRange(location, radius);
     }
@@ -33,5 +34,9 @@ public class User {
     	
     	//returns true if any tags match else returns false
     	return this.tags.hasInterests(tags);
+    }
+    public void send(String msg){
+    	this.outStream.println(msg);
+    	this.outStream.flush();
     }
 }
