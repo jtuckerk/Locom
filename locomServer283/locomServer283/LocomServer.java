@@ -8,7 +8,7 @@ import java.util.HashSet;
 public class LocomServer {
 
     public static volatile boolean shutdown = false;
-    public static HashSet<WorkerThread> threads = new HashSet<WorkerThread>();
+    public static HashSet<UserThread> threads = new HashSet<UserThread>();
 
     public static void main(String[] args) throws IOException {
 	ServerSocket ss = new ServerSocket(2000);
@@ -23,7 +23,7 @@ public class LocomServer {
 
 	    System.out.println("Connection accepted from client at : " + s.getRemoteSocketAddress());
 
-	    WorkerThread wt = new WorkerThread(s, users, broadcasts);
+	    UserThread wt = new UserThread(s, users, broadcasts);
 
 	    threads.add(wt);
 	    wt.start();
