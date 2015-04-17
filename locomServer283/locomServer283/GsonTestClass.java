@@ -1,6 +1,5 @@
 package locomServer283;
 
-import java.io.PrintWriter;
 import java.util.Date;
 
 public class GsonTestClass {

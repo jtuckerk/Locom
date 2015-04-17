@@ -32,6 +32,6 @@ public class LocomServer {
 			System.out.println("bank is shutdown: " + shutdown);
 
 		}
-		
+		ss.close();
 	}
 }

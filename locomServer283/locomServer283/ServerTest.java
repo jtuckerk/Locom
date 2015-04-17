@@ -1,17 +1,9 @@
 package locomServer283;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
-import java.util.Random;
-import java.util.Scanner;
+
 
 import com.google.gson.Gson;
 
@@ -26,8 +18,7 @@ public class ServerTest {
 
 		// set up input and output streams
 		PrintStream ps = new PrintStream(socket.getOutputStream());
-		BufferedReader br = new BufferedReader(new InputStreamReader(
-				socket.getInputStream()));
+
 		
 			// ask the server to transfer $1 from source to destination account
 			
@@ -42,13 +33,15 @@ public class ServerTest {
 			LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
 
 			System.out.println("Here2");
-			GsonTestClass tc = new GsonTestClass();
+			//GsonTestClass tc = new GsonTestClass();
 			String jsonStr = gson.toJson(LOCOMmsg);
 			
 			System.out.println(jsonStr);
 			
 			String line = jsonStr;
 			ps.println(line);		
+			
+			socket.close();
 	}
  
 }

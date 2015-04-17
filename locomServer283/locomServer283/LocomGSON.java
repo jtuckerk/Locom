@@ -1,7 +1,5 @@
 package locomServer283;
 
-import java.io.PrintWriter;
-
 public class LocomGSON {
 	public String type;
 	public Broadcast broadcast;
