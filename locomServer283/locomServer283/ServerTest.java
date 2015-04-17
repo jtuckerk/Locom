@@ -43,7 +43,7 @@ public class ServerTest {
 
 			System.out.println("Here2");
 			GsonTestClass tc = new GsonTestClass();
-			String jsonStr = gson.toJson(tc);
+			String jsonStr = gson.toJson(LOCOMmsg);
 			
 			System.out.println(jsonStr);
 			

@@ -6,8 +6,6 @@ public class UserSendable {
 	public String userName;
 	public Location location;
 	public InterestTags tags;
-	public PrintWriter outStream;
-	//@@ maybe not public
 	
     public UserSendable(String userName, Location location, InterestTags tags, PrintWriter outStream) {
 	this.userName = userName;
