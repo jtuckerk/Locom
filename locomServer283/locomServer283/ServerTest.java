@@ -39,7 +39,7 @@ public class ServerTest {
 			
 			UserSendable us = new UserSendable(u);
 			
-			LocomGSON LOCOMmsg = new LocomGSON(null,null,us);
+			LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
 
 			System.out.println("Here2");
 			GsonTestClass tc = new GsonTestClass();

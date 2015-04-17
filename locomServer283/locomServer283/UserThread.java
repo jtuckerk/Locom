@@ -85,7 +85,7 @@ public class UserThread extends Thread {
 					} else {
 						// handle requests
 						
-						System.out.println("AAAAAAAAA");
+						
 						messageHandle(line);
 						//StringTokenizer tokens = new StringTokenizer(line);
 						//outStream.println(message = parseRequest(tokens));
@@ -113,27 +113,35 @@ public class UserThread extends Thread {
 	public void messageHandle(String msg){
 		Gson gson = new Gson();
 		System.out.println("raw message received: "+ msg);
-		//LocomGSON message = gson.fromJson(msg, LocomGSON.class);
-		/*
+		
+		LocomGSON message = gson.fromJson(msg, LocomGSON.class);
+		if (message.type == null){
+			message.type = "";
+		}
 		switch (message.type){
 		case "connect":
 			System.out.println("received connect");
 			connect(message.user);
+			break;
 		case "update":
 			update(message.user);
+			break;
 		case "broadcast":
 			broadcast(message.broadcast, msg);
+			break;
+		default:
+			System.out.println("Uknown or null message type");
 		}
-		*/
+		
 	}
 	
-	public void connect(User connectUser){
+	public void connect(UserSendable connectUser){
 		System.out.println("connecting user: " );
 		this.user = new User(connectUser.userName, connectUser.location, connectUser.tags, this.user.outStream);
 
 		
 	}
-	public void update(User upUser){
+	public void update(UserSendable upUser){
 		System.out.println("updating user: " );
 		
 		//@@checking?
