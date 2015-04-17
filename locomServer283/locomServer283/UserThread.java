@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Iterator;
-import java.util.StringTokenizer;
 
 import com.google.gson.Gson;
 
@@ -34,24 +33,10 @@ public class UserThread extends Thread {
 		this.AppUsers = users;
 		this.broadcasts = broadcasts;
 		String[] defaultInterest = {"Locom"};
-		this.user = new User("Unset", new Location(1.1, 1.1), new InterestTags(defaultInterest), outStream);
 
 		System.out.println("Userthread created: " + this.getId());
-		
-		try {
-			this.inStream = new BufferedReader(new InputStreamReader(
-					s.getInputStream()));
-			this.outStream = new PrintWriter(s.getOutputStream());
-		} catch (IOException e) {
-			System.out.println("User Connection fail ");
-			e.printStackTrace();
-		} finally {
-			try {
-				s.close();
-			} catch (IOException e) {
 
-			}
-		}
+		this.user = new User("Unset", new Location(1.1, 1.1), new InterestTags(defaultInterest), outStream);
 
 	}
 
@@ -61,6 +46,9 @@ public class UserThread extends Thread {
 		System.out.println("Userthread started running: " + this.getId());
 
 		try{
+			this.inStream = new BufferedReader(new InputStreamReader(
+					s.getInputStream()));
+			this.outStream = new PrintWriter(s.getOutputStream());
 			String line;
 			if (LocomServer.shutdown) {
 				this.outStream.println("Bank is Closed");
@@ -71,7 +59,7 @@ public class UserThread extends Thread {
 					if (line.equals("SHUTDOWN")
 							&& s.getInetAddress().isLoopbackAddress()) {
 						LocomServer.shutdown = true;
-						// out.println("Shutdown request received");
+						System.out.println("Shutdown request received");
 						// System.out.println("Shutdown request received");
 						outStream.flush();
 						LocomServer.threads.remove(this);
@@ -96,11 +84,12 @@ public class UserThread extends Thread {
 
 					} else {
 						// handle requests
-						String message;
+						
+						System.out.println("AAAAAAAAA");
 						messageHandle(line);
-						StringTokenizer tokens = new StringTokenizer(line);
-						outStream.println(message = parseRequest(tokens));
-						System.out.println(message);
+						//StringTokenizer tokens = new StringTokenizer(line);
+						//outStream.println(message = parseRequest(tokens));
+						//System.out.println(message);
 
 					}
 					outStream.flush();
@@ -123,16 +112,19 @@ public class UserThread extends Thread {
 
 	public void messageHandle(String msg){
 		Gson gson = new Gson();
-		LocomGSON message = gson.fromJson(msg, LocomGSON.class);
-		
+		System.out.println("raw message received: "+ msg);
+		//LocomGSON message = gson.fromJson(msg, LocomGSON.class);
+		/*
 		switch (message.type){
 		case "connect":
-			connect(message.connect.user);
+			System.out.println("received connect");
+			connect(message.user);
 		case "update":
-			update(message.update.user);
+			update(message.user);
 		case "broadcast":
 			broadcast(message.broadcast, msg);
 		}
+		*/
 	}
 	
 	public void connect(User connectUser){
@@ -159,27 +151,6 @@ public class UserThread extends Thread {
 			}
 		}
 	}
-	public void parseJson(){
-		//serialize
-		Gson gson = new Gson();
-		//String xyzAsString = gson.toJson(xyz);
-		
-		//deserialize
-		//Classname xyz = gson.fromJson(JSONedString, Classname.class);
-	}
-	public String parseRequest(StringTokenizer tokens) {
-		if (tokens.countTokens() == 3) {
-			int amount = Integer.parseInt(tokens.nextToken());
-			int source = Integer.parseInt(tokens.nextToken());
-			int destination = Integer.parseInt(tokens.nextToken());
 
-			String message;
-			// message = handleRequest(amount, source, destination);
-
-			return "hi//@@";
-		} else {
-			return "bad request";
-		}
-	}
 
 }

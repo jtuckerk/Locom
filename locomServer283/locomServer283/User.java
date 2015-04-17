@@ -1,8 +1,6 @@
 package locomServer283;
 
-import java.io.BufferedReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 
 public class User {
 
@@ -39,4 +37,10 @@ public class User {
     	this.outStream.println(msg);
     	this.outStream.flush();
     }
+    
+    public UserSendable getUserSendable(){
+		return new UserSendable(this);
+    }
 }
+
+
