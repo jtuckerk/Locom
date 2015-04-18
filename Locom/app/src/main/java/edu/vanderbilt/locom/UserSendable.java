@@ -7,7 +7,7 @@ public class UserSendable {
 	public Location location;
 	public InterestTags tags;
 	
-    public UserSendable(String userName, Location location, InterestTags tags, PrintWriter outStream) {
+    public UserSendable(String userName, Location location, InterestTags tags) {
 	this.userName = userName;
 	this.location = location;
 	this.tags = tags;
