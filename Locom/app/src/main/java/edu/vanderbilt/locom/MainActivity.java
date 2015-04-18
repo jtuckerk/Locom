@@ -19,6 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,8 +59,15 @@ public class MainActivity extends ActionBarActivity
     static Location mLastLocation;
     String mLatitudeText = "";
     String mLongitudeText = "";
+
     static Double mLatitude = 0.0;
     static Double mLongitude = 0.0;
+
+
+    String[] tag = {};
+    static InterestTags tags = new InterestTags(new String[] {});
+    static UserSendable user = new UserSendable("unset", new edu.vanderbilt.locom.Location(0.0, 0.0),tags);
+
 
     // server to connect to (commented out - for testing with groupcast)
     protected static final int PORT = 2000; //20000;
@@ -645,6 +653,8 @@ public class MainActivity extends ActionBarActivity
         }
     }
     public static class tagsFragment extends Fragment {
+
+        RadioButton rb = null;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -670,6 +680,9 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_tags, container, false);
+
+            RadioButton rb = (RadioButton) getView().findViewById(R.id.radioButton1);
+            user = new UserSendable("hi", new edu.vanderbilt.locom.Location(4.7,8.9), new InterestTags(new String[] {}));
             return rootView;
         }
 
