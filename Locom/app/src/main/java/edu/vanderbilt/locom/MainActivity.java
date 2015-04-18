@@ -52,14 +52,14 @@ public class MainActivity extends ActionBarActivity
     private static final String TAG = "MainActivity";
 
     // Google play
-    GoogleApiClient mGoogleApiClient = null;
+    static GoogleApiClient mGoogleApiClient = null;
 
     // store location, latitude, and longitude
-    Location mLastLocation;
+    static Location mLastLocation;
     String mLatitudeText = "";
     String mLongitudeText = "";
-    Double mLatitude = null;
-    Double mLongitude = null;
+    static Double mLatitude = 0.0;
+    static Double mLongitude = 0.0;
 
     // server to connect to (commented out - for testing with groupcast)
     protected static final int PORT = 2000; //20000;
@@ -68,12 +68,10 @@ public class MainActivity extends ActionBarActivity
     // networking
     Socket socket = null;
     BufferedReader in = null;
-    PrintWriter out = null;
-    boolean connected = false;
+    static PrintWriter out = null;
+    static boolean connected = false;
 
-    // UI
-    Button bConnect = null;
-    EditText etName = null;
+
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -99,46 +97,6 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        // find UI elements defined in xml
-        // for ex
-        bConnect = (Button) this.findViewById(R.id.bConnect);
-        etName = (EditText) this.findViewById(R.id.etName);
-
-        // assign OnClickListener to user login
-        bConnect.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                        mGoogleApiClient);
-                if (mLastLocation != null) {
-                    mLatitude = Double.valueOf(mLastLocation.getLatitude());
-                    mLongitude = Double.valueOf(mLastLocation.getLongitude());
-                }
-
-                String name = etName.getText().toString();
-
-                // send gson connect message with username and lat/long
-                String [] tag = {};
-                InterestTags tags = new InterestTags(tag);
-                User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags , null);
-
-                Gson gson = new Gson();
-
-                UserSendable us = new UserSendable(u);
-
-                LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
-
-                //GsonTestClass tc = new GsonTestClass();
-                String jsonStr = gson.toJson(LOCOMmsg);
-
-                System.out.println(jsonStr);
-
-                send(jsonStr);
-
-                hideUserLogin();
-            }
-        });
 
 
         buildGoogleApiClient();
@@ -146,11 +104,6 @@ public class MainActivity extends ActionBarActivity
         mGoogleApiClient.connect();
 
         connect();
-    }
-
-    void hideUserLogin() {
-        findViewById(R.id.bConnect).setVisibility(View.GONE);
-        findViewById(R.id.etName).setVisibility(View.GONE);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -402,7 +355,7 @@ public class MainActivity extends ActionBarActivity
         }.start();
     }
 
-    boolean send(String msg) {
+    static boolean send(String msg) {
         if (!connected) {
             Log.i(TAG, "can't send: not connected");
             return false;
@@ -420,13 +373,9 @@ public class MainActivity extends ActionBarActivity
             @Override
             protected void onPostExecute(Boolean error) {
                 if (!error) {
-                    Toast.makeText(getApplicationContext(),
-                            "Message sent to server", Toast.LENGTH_SHORT)
-                            .show();
+                   // Toast.makeText(getApplicationContext(),"Message sent to server", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Error sending message to server",
-                            Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(getApplicationContext(),"Error sending message to server",Toast.LENGTH_SHORT).show();
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, msg);
@@ -610,6 +559,10 @@ public class MainActivity extends ActionBarActivity
     }
 
     public static class HomeScreenFragment extends Fragment {
+
+        // UI
+
+
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -635,6 +588,47 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_homescreen, container, false);
+
+            // find UI elements defined in xml
+            // for ex
+            Button bConnect = (Button) getView().findViewById(R.id.bConnect);
+            final EditText etName = (EditText) getView().findViewById(R.id.etName);
+
+            // assign OnClickListener to user login
+            bConnect.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                            mGoogleApiClient);
+                    if (mLastLocation != null) {
+                        mLatitude = Double.valueOf(mLastLocation.getLatitude());
+                        mLongitude = Double.valueOf(mLastLocation.getLongitude());
+                    }
+
+                    String name = etName.getText().toString();
+
+                    // send gson connect message with username and lat/long
+                    String [] tag = {};
+                    InterestTags tags = new InterestTags(tag);
+                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags , null);
+
+                    Gson gson = new Gson();
+
+                    UserSendable us = new UserSendable(u);
+
+                    LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
+
+                    String jsonStr = gson.toJson(LOCOMmsg);
+
+                    System.out.println(jsonStr);
+
+                    send(jsonStr);
+
+                    hideUserLogin();
+                }
+            });
+
             return rootView;
         }
 
@@ -643,6 +637,11 @@ public class MainActivity extends ActionBarActivity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+
+        void hideUserLogin() {
+            getView().findViewById(R.id.bConnect).setVisibility(View.GONE);
+            getView().findViewById(R.id.etName).setVisibility(View.GONE);
         }
     }
     public static class tagsFragment extends Fragment {

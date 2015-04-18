@@ -21,22 +21,5 @@
         android:layout_gravity="start" android:name="edu.vanderbilt.locom.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <EditText
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/etName"/>
-
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Connect"
-            android:id="@+id/bConnect"/>
-
-    </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
