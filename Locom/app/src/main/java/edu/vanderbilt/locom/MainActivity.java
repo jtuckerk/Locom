@@ -16,11 +16,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,6 +58,8 @@ public class MainActivity extends ActionBarActivity
     Location mLastLocation;
     String mLatitudeText = "";
     String mLongitudeText = "";
+    Double mLatitude = null;
+    Double mLongitude = null;
 
     // server to connect to (commented out - for testing with groupcast)
     protected static final int PORT = 2000; //20000;
@@ -63,6 +70,10 @@ public class MainActivity extends ActionBarActivity
     BufferedReader in = null;
     PrintWriter out = null;
     boolean connected = false;
+
+    // UI
+    Button bConnect = null;
+    EditText etName = null;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -90,38 +101,56 @@ public class MainActivity extends ActionBarActivity
 
         // find UI elements defined in xml
         // for ex
-        // button1 = (Button) this.findViewById(R.id.button1);
+        bConnect = (Button) this.findViewById(R.id.bConnect);
+        etName = (EditText) this.findViewById(R.id.etName);
 
-        // any other initial state
-        // for example, hideBoard() from ttt
-
-        // assign OnClickListener to button example
-        /*
+        // assign OnClickListener to user login
         bConnect.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                String name = etName.getText().toString();
-                // sanity check: make sure that the name does not start with an @ character
-                if (name == null || name.startsWith("@")) {
-                    Toast.makeText(getApplicationContext(), "Invalid name",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    send("NAME,"+etName.getText());
-
-                    // send message to join/create group
-                    // I'm Os, you are Xs
-                    send("join,@kirvenPickens2,2");
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                        mGoogleApiClient);
+                if (mLastLocation != null) {
+                    mLatitude = Double.valueOf(mLastLocation.getLatitude());
+                    mLongitude = Double.valueOf(mLastLocation.getLongitude());
                 }
+
+                String name = etName.getText().toString();
+
+                // send gson connect message with username and lat/long
+                String [] tag = {};
+                InterestTags tags = new InterestTags(tag);
+                User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags , null);
+
+                Gson gson = new Gson();
+
+                UserSendable us = new UserSendable(u);
+
+                LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
+
+                //GsonTestClass tc = new GsonTestClass();
+                String jsonStr = gson.toJson(LOCOMmsg);
+
+                System.out.println(jsonStr);
+
+                send(jsonStr);
+
+                hideUserLogin();
             }
         });
-        */
+
 
         buildGoogleApiClient();
 
         mGoogleApiClient.connect();
 
         connect();
+    }
+
+    void hideUserLogin() {
+        findViewById(R.id.bConnect).setVisibility(View.GONE);
+        findViewById(R.id.etName).setVisibility(View.GONE);
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -266,8 +295,8 @@ public class MainActivity extends ActionBarActivity
                     receive();
 
                     /////////////// for testing with groupcast server //////////////
-                    send("NAME,locom");
-                    send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+                    //send("NAME,locom");
+                   // send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
 
                 } else {
                     Toast.makeText(getApplicationContext(),
@@ -412,15 +441,18 @@ public class MainActivity extends ActionBarActivity
                 mGoogleApiClient);
         if (mLastLocation != null) {
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+            mLatitude = Double.valueOf(mLastLocation.getLatitude());
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
+            mLongitude = Double.valueOf(mLastLocation.getLongitude());
         }
         Log.i(TAG, "Latitude " + mLatitudeText);
         Log.i(TAG, "Longitude " + mLongitudeText);
 
         // send server latitude and longitude
         if (connected) {
-            send("NAME,locom");
-            send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+            //send("NAME,locom");
+            //
+            // send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
         }
     }
 
