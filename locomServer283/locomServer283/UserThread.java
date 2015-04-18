@@ -107,6 +107,9 @@ public class UserThread extends Thread {
 			}
 		}
 
+		synchronized(this.AppUsers){
+			this.AppUsers.removeUser(this.user);
+		}
 		System.out.println("Workerthread exited: " + this.getId());
 	}
 
@@ -138,7 +141,10 @@ public class UserThread extends Thread {
 	public void connect(UserSendable connectUser){
 		System.out.println("connecting user: " );
 		this.user = new User(connectUser.userName, connectUser.location, connectUser.tags, this.user.outStream);
-
+		
+		synchronized(this.AppUsers){
+			this.AppUsers.addUser(this.user);
+		}
 		
 	}
 	public void update(UserSendable upUser){
@@ -151,7 +157,9 @@ public class UserThread extends Thread {
 	public void broadcast(Broadcast receivedcast, String msg){
 		System.out.println("broadcast recieved " );
 		
-		this.broadcasts.add(receivedcast);
+		synchronized(this.broadcasts){
+			this.broadcasts.add(receivedcast);
+		}
 		
 		for (User u: this.AppUsers.users){
 			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius())){

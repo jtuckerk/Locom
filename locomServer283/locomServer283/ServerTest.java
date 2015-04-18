@@ -8,7 +8,7 @@ import java.net.Socket;
 import com.google.gson.Gson;
 
 public class ServerTest {
-	static final String SERVER_ADDRESS = "localhost";
+	static final String SERVER_ADDRESS = "52.11.228.217";
 	public static final int PORT = 2000;
 
 	public static void main(String[] args) throws IOException {
