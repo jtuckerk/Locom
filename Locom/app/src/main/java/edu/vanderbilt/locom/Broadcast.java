@@ -44,4 +44,7 @@ public class Broadcast {
 	public double getRadius(){
 		return this.radius;
 	}
+    public String getTitle(){ return title; }
+    public String getMessageBody(){ return message;}
+    public Date getEventDate(){return eventDate; }
 }

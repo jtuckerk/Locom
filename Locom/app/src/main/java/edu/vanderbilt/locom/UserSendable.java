@@ -1,7 +1,5 @@
 package edu.vanderbilt.locom;
 
-import java.io.PrintWriter;
-
 public class UserSendable {
 	public String userName;
 	public Location location;
@@ -17,5 +15,10 @@ public class UserSendable {
     	this.userName = u.userName;
     	this.location = u.location;
     	this.tags = u.tags;
+    }
+
+    public float distanceToBroadcast(Broadcast bcast){
+
+        return location.getDistance(bcast.getLocation());
     }
 }

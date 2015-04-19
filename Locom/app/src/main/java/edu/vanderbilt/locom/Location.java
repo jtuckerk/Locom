@@ -22,11 +22,12 @@ public class Location {
 		 return (this.getDistance(location) < Radius);
 	}
 	
-	public double getDistance(Location location){
-		double xSqrd = Math.pow((this.longitude - location.longitude), 2);
-		double ySqrd = Math.pow((this.latitude - location.latitude), 2);
+	public float getDistance(Location location){
+
+        float[] results = {0,0,0};
+        android.location.Location.distanceBetween( latitude, longitude, location.latitude,location.longitude, results);
 		
-		return Math.sqrt(xSqrd+ySqrd);
+		return results[0];
 	}
 	
 	

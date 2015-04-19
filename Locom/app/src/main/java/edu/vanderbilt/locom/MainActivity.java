@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -264,7 +266,7 @@ public class MainActivity extends ActionBarActivity
 
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Error: " + errorMsg, Toast.LENGTH_SHORT).show();
+                            "Could not Connect: \n Exiting" , Toast.LENGTH_SHORT).show();
                     // can't connect: close the activity
                     finish();
                 }
@@ -322,18 +324,17 @@ public class MainActivity extends ActionBarActivity
                 // if we haven't returned yet, tell the user that we have an unhandled message
                 Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
 
-                //////// for testing with groupcast ///////
-                if(msg.startsWith("+OK,NAME")) {
+                Gson gson = new Gson();
+                System.out.println("raw message received: "+ msg);
 
-                    return;
-                }
-                if(msg.startsWith("+MSG")) {
-                    Log.i(TAG, "you received message from server " + msg );
-                    return;
-                }
-                if(msg.startsWith("+OK,MSG")) {
-                    Log.i(TAG, "server received your message");
-                    return;
+                LocomGSON message = gson.fromJson(msg, LocomGSON.class);
+                if (message.type == null){
+                    message.type = "";
+                }else if (message.type == "broadcast"){
+                    Toast.makeText(getApplicationContext(), "Incoming Broadcast: "+message.broadcast.getTitle(), Toast.LENGTH_SHORT).show();
+                    broadcasts.add(message.broadcast);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Cannot handle incoming message", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -575,6 +576,8 @@ public class MainActivity extends ActionBarActivity
         View rootV;
         Button bConnect;
         EditText etName;
+        View loginView;
+        ListView bCastList;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -602,9 +605,12 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_homescreen, container, false);
 
 
-        Button bConnect = (Button) rootView.findViewById(R.id.connectButton);
+        bConnect = (Button) rootView.findViewById(R.id.connectButton);
         etName = (EditText) rootView.findViewById(R.id.etName);
+        loginView = (View) rootView.findViewById(R.id.loginView);
+        bCastList = (ListView) rootView.findViewById(R.id.bCastListView);
 
+        
         // assign OnClickListener to user login
         bConnect.setOnClickListener(new View.OnClickListener() {
 
@@ -651,9 +657,11 @@ public class MainActivity extends ActionBarActivity
         }
 
         public void hideUserLogin() {
-            rootV.findViewById(R.id.connectButton).setVisibility(View.GONE);
-            rootV.findViewById(R.id.etName).setVisibility(View.GONE);
-            rootV.findViewById(R.id.textView5);
+
+            rootV.findViewById(R.id.loginView).setVisibility(View.GONE);
+            //rootV.findViewById(R.id.connectButton).setVisibility(View.GONE);
+            //rootV.findViewById(R.id.etName).setVisibility(View.GONE);
+            //rootV.findViewById(R.id.textView5);
         }
     }
     public static class tagsFragment extends Fragment {
