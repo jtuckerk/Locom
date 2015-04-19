@@ -30,5 +30,8 @@ public class Broadcasts {
 			}
 		}
 	}
+    public Set<Broadcast> getSet(){
+        return broadcasts;
+    }
 	
 }

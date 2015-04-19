@@ -17,12 +17,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -37,6 +41,11 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity
@@ -534,6 +543,19 @@ public class MainActivity extends ActionBarActivity
     }
 
     public static class CreateBroadcastFragment extends Fragment {
+        DatePicker dPicker;
+        TimePicker tPicker;
+        TextView titleEntry;
+        TextView descriptionEntry;
+        CheckBox foodCheck;
+        CheckBox musicCheck;
+        CheckBox puppiesCheck;
+        CheckBox otherCheck;
+        TextView otherEntry;
+        Button sendBcast;
+        View rootV;
+
+        Broadcast currentBroadcast;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -559,6 +581,21 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_createbroadcast, container, false);
+            rootV = rootView;
+
+            dPicker = (DatePicker) rootView.findViewById(R.id.datePicker);
+            tPicker = (TimePicker) rootView.findViewById(R.id.timePicker);
+            titleEntry = (TextView) rootView.findViewById(R.id.eventNameEntry);
+            descriptionEntry = (TextView) rootView.findViewById(R.id.descriptionEntry);
+            foodCheck = (CheckBox) rootView.findViewById(R.id.food);
+            musicCheck = (CheckBox) rootView.findViewById(R.id.music);
+            puppiesCheck = (CheckBox) rootView.findViewById(R.id.puppies);
+            otherCheck = (CheckBox) rootView.findViewById(R.id.other);
+            otherEntry = (TextView) rootView.findViewById(R.id.otherEntry);
+
+            Calendar cal = Calendar.getInstance();
+            Date date = cal.getTime();
+            currentBroadcast = new Broadcast("none", "none", null, 10, date,date );
             return rootView;
         }
 
@@ -575,6 +612,7 @@ public class MainActivity extends ActionBarActivity
         // UI
         View rootV;
         Button bConnect;
+        Button createBCast;
         EditText etName;
         View loginView;
         ListView bCastList;
@@ -609,8 +647,8 @@ public class MainActivity extends ActionBarActivity
         etName = (EditText) rootView.findViewById(R.id.etName);
         loginView = (View) rootView.findViewById(R.id.loginView);
         bCastList = (ListView) rootView.findViewById(R.id.bCastListView);
+        createBCast = (Button) rootView.findViewById(R.id.createBCastButton);
 
-        
         // assign OnClickListener to user login
         bConnect.setOnClickListener(new View.OnClickListener() {
 
@@ -644,11 +682,50 @@ public class MainActivity extends ActionBarActivity
             }
         });
 
+            createBCast.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, CreateBroadcastFragment.newInstance(1))
+                            .commit();
+
+                }
+            });
+
+            bCastList = (ListView) inflater.inflate(
+                    R.layout.fragment_navigation_drawer, container, false);
+            bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    selectBCast(position);
+                }
+            });
+
+            List<String> bCastArray = new ArrayList<String>();
+
+            for (Iterator<Broadcast> i = broadcasts.getSet().iterator(); i.hasNext(); ){
+
+                bCastArray.add(i.next().getTitle());
+            }
+
+            String[] strArr = new String[bCastArray.size()];
+            strArr = bCastArray.toArray(strArr);
+            bCastList.setAdapter(new ArrayAdapter<String>(
+                    getActivity(),
+                    android.R.layout.simple_list_item_activated_1,
+                    android.R.id.text1,
+                    strArr));
+
             // find UI elements defined in xml
             rootV = rootView;
             return rootView;
         }
-
+        public void selectBCast(int pos){
+            Toast.makeText(getActivity(),
+                    "List Item " + pos + " selected", Toast.LENGTH_SHORT).show();
+        }
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);

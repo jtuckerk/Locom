@@ -2,6 +2,7 @@ package edu.vanderbilt.locom;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class Broadcast {
 
@@ -26,8 +27,8 @@ public class Broadcast {
 		this(title, message, location, radius, eventDate, sentDate, defaultTimeout(sentDate));
 	}
 	private static Date defaultTimeout(Date sendDate){
-		
-	    Calendar cal = Calendar.getInstance(); // creates calendar
+		Calendar cal = new GregorianCalendar();
+	    //Calendar cal = Calendar.getInstance(); // creates calendar
 	    cal.setTime(sentDate); // sets calendar time/date
 	    cal.add(Calendar.HOUR_OF_DAY, 72); // adds one hour
 	    
