@@ -92,7 +92,6 @@ public class MainActivity extends ActionBarActivity
     static boolean connected = false;
 
 
-
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -118,16 +117,12 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-
-
+        // connect to Google Play and the server
         buildGoogleApiClient();
-
         mGoogleApiClient.connect();
-
         connect();
-
     }
-
+    /* Connects to Google Play and enables location services*/
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -141,16 +136,19 @@ public class MainActivity extends ActionBarActivity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position){
+            // Home screen- view available messages
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, HomeScreenFragment.newInstance(position + 1))
                         .commit();
                 break;
+            // Tags - choose tags that interest you and update them in server
             case 1:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, tagsFragment.newInstance(position + 1))
                         .commit();
                 break;
+            // Broadcast - send messages
             case 2:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, CreateBroadcastFragment.newInstance(position + 1))
@@ -284,7 +282,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     /**
-     * Start receiving one-line messages over the TCP connection. Received lines are
+     * Start receiving messages in gson format, always of type broadcast. Received lines are
      * handled in the onProgressUpdate method which runs on the UI thread.
      * This method is automatically called after a connection has been established.
      */
@@ -331,7 +329,7 @@ public class MainActivity extends ActionBarActivity
                 String msg = lines[0];
 
                 // if we haven't returned yet, tell the user that we have an unhandled message
-                Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
 
                 Gson gson = new Gson();
                 System.out.println("raw message received: "+ msg);
@@ -616,6 +614,7 @@ public class MainActivity extends ActionBarActivity
         EditText etName;
         View loginView;
         ListView bCastList;
+
         /**
          * The fragment argument representing the section number for this
          * fragment.
