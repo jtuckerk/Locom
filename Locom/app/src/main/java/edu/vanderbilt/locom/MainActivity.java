@@ -53,10 +53,10 @@ public class MainActivity extends ActionBarActivity
     private static final String TAG = "MainActivity";
 
     // Google play
-    static GoogleApiClient mGoogleApiClient = null;
+    GoogleApiClient mGoogleApiClient;
 
     // store location, latitude, and longitude
-    static Location mLastLocation;
+    Location mLastLocation;
     String mLatitudeText = "";
     String mLongitudeText = "";
 
@@ -67,6 +67,7 @@ public class MainActivity extends ActionBarActivity
     String[] tag = {};
     static InterestTags tags = new InterestTags(new String[] {});
     static UserSendable user = new UserSendable("unset", new edu.vanderbilt.locom.Location(0.0, 0.0),tags);
+    static Broadcasts broadcasts = new Broadcasts();
 
 
     // server to connect to (commented out - for testing with groupcast)
@@ -90,6 +91,7 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+    private int ConnectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class MainActivity extends ActionBarActivity
         mGoogleApiClient.connect();
 
         connect();
+
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -569,8 +572,9 @@ public class MainActivity extends ActionBarActivity
     public static class HomeScreenFragment extends Fragment {
 
         // UI
-
-
+        View rootV;
+        Button bConnect;
+        EditText etName;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -597,46 +601,45 @@ public class MainActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_homescreen, container, false);
 
+
+        Button bConnect = (Button) rootView.findViewById(R.id.connectButton);
+        etName = (EditText) rootView.findViewById(R.id.etName);
+
+        // assign OnClickListener to user login
+        bConnect.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                 //       mGoogleApiClient);
+
+                String name;
+                name = etName.getText().toString();
+
+                // send gson connect message with username and lat/long
+                String [] tag = {};
+                InterestTags tags = new InterestTags(tag);
+                User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags , null);
+
+                Gson gson = new Gson();
+
+                UserSendable us = new UserSendable(u);
+
+                LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
+
+                String jsonStr = gson.toJson(LOCOMmsg);
+
+                System.out.println(jsonStr);
+
+                send(jsonStr);
+
+                hideUserLogin();
+            }
+        });
+
             // find UI elements defined in xml
-            // for ex
-            Button bConnect = (Button) getView().findViewById(R.id.bConnect);
-            final EditText etName = (EditText) getView().findViewById(R.id.etName);
-
-            // assign OnClickListener to user login
-            bConnect.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                            mGoogleApiClient);
-                    if (mLastLocation != null) {
-                        mLatitude = Double.valueOf(mLastLocation.getLatitude());
-                        mLongitude = Double.valueOf(mLastLocation.getLongitude());
-                    }
-
-                    String name = etName.getText().toString();
-
-                    // send gson connect message with username and lat/long
-                    String [] tag = {};
-                    InterestTags tags = new InterestTags(tag);
-                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags , null);
-
-                    Gson gson = new Gson();
-
-                    UserSendable us = new UserSendable(u);
-
-                    LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
-
-                    String jsonStr = gson.toJson(LOCOMmsg);
-
-                    System.out.println(jsonStr);
-
-                    send(jsonStr);
-
-                    hideUserLogin();
-                }
-            });
-
+            rootV = rootView;
             return rootView;
         }
 
@@ -647,14 +650,15 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
 
-        void hideUserLogin() {
-            getView().findViewById(R.id.bConnect).setVisibility(View.GONE);
-            getView().findViewById(R.id.etName).setVisibility(View.GONE);
+        public void hideUserLogin() {
+            rootV.findViewById(R.id.connectButton).setVisibility(View.GONE);
+            rootV.findViewById(R.id.etName).setVisibility(View.GONE);
+            rootV.findViewById(R.id.textView5);
         }
     }
     public static class tagsFragment extends Fragment {
 
-        RadioButton rb = null;
+        RadioButton rb;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -679,11 +683,19 @@ public class MainActivity extends ActionBarActivity
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_tags, container, false);
 
-            RadioButton rb = (RadioButton) getView().findViewById(R.id.radioButton1);
-            user = new UserSendable("hi", new edu.vanderbilt.locom.Location(4.7,8.9), new InterestTags(new String[] {}));
+            rb = (RadioButton) rootView.findViewById(R.id.radioButton1);
+
+            rb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i(TAG, "radio button pressed");
+                }
+            });
             return rootView;
+
         }
 
         @Override

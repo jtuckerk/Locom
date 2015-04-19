@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -71,32 +72,33 @@ public class MainActivity extends ActionBarActivity
 
         // find UI elements defined in xml
         // for ex
-        // button1 = (Button) this.findViewById(R.id.button1);
+        Button bConnect = (Button) this.findViewById(R.id.button1);
 
         // any other initial state
         // for example, hideBoard() from ttt
 
         // assign OnClickListener to button example
-        /*
+
         bConnect.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                String name = etName.getText().toString();
-                // sanity check: make sure that the name does not start with an @ character
-                if (name == null || name.startsWith("@")) {
-                    Toast.makeText(getApplicationContext(), "Invalid name",
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    send("NAME,"+etName.getText());
+                buildGoogleApiClient();
 
-                    // send message to join/create group
-                    // I'm Os, you are Xs
-                    send("join,@kirvenPickens2,2");
+                mGoogleApiClient.connect();
+
+                mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                        mGoogleApiClient);
+                if (mLastLocation != null) {
+                    mLatitudeText = String.valueOf(mLastLocation.getLatitude());
+                    mLongitudeText = String.valueOf(mLastLocation.getLongitude());
                 }
+                Log.i(TAG, "Latitude " + mLatitudeText);
+                Log.i(TAG, "Longitude " + mLongitudeText);
+
             }
         });
-        */
+
 
         buildGoogleApiClient();
 
@@ -198,8 +200,8 @@ public class MainActivity extends ActionBarActivity
                     receive();
 
                     /////////////// for testing with groupcast server //////////////
-                    send("NAME,locom");
-                    send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+                   // send("NAME,locom");
+                    //send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
 
                 } else {
                     Toast.makeText(getApplicationContext(),
@@ -354,7 +356,9 @@ public class MainActivity extends ActionBarActivity
         // send server latitude and longitude
         if (connected) {
             send("NAME,locom");
-            send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+
+            Toast.makeText(getApplicationContext(),
+                    "Long: " + mLatitudeText + " Lat: " + mLongitudeText, Toast.LENGTH_SHORT).show();
         }
     }
 
