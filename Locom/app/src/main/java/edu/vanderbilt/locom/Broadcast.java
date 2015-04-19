@@ -26,10 +26,15 @@ public class Broadcast {
 	public Broadcast(String title, String message, Location location, double radius, Date eventDate, Date sentDate){
 		this(title, message, location, radius, eventDate, sentDate, defaultTimeout(sentDate));
 	}
-	private static Date defaultTimeout(Date sendDate){
+	private static Date defaultTimeout(Date sentDate){
 		Calendar cal = new GregorianCalendar();
 	    //Calendar cal = Calendar.getInstance(); // creates calendar
-	    cal.setTime(sentDate); // sets calendar time/date
+	    if (cal == null){
+            System.out.println("null fucking calendar");
+        }
+        System.out.println("AAAAAAAAA");
+        System.out.println(sentDate.toString());
+        cal.setTime(sentDate); // sets calendar time/date
 	    cal.add(Calendar.HOUR_OF_DAY, 72); // adds one hour
 	    
 		return cal.getTime(); // returns new date object, 72 hours in the future

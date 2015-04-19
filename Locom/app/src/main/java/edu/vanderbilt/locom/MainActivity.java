@@ -551,6 +551,7 @@ public class MainActivity extends ActionBarActivity
         CheckBox otherCheck;
         TextView otherEntry;
         Button sendBcast;
+        TextView radius;
         View rootV;
 
         Broadcast currentBroadcast;
@@ -590,10 +591,59 @@ public class MainActivity extends ActionBarActivity
             puppiesCheck = (CheckBox) rootView.findViewById(R.id.puppies);
             otherCheck = (CheckBox) rootView.findViewById(R.id.other);
             otherEntry = (TextView) rootView.findViewById(R.id.otherEntry);
+            sendBcast = (Button) rootView.findViewById(R.id.sendBCast);
+            radius = (Button) rootView.findViewById(R.id.radius);
+
+            sendBcast.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    String name = titleEntry.getText().toString();
+                    String description = descriptionEntry.getText().toString();
+                    int day = dPicker.getDayOfMonth();
+                    int month = dPicker.getMonth();
+                    int year = dPicker.getYear();
+                    int hour = tPicker.getCurrentHour();
+                    int minute = tPicker.getCurrentMinute();
+                    int second = 0;
+
+                    int rad = Integer.parseInt(radius.getText().toString());
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(year,month,day,hour,minute,second);
+
+                    Date eventDate = cal.getTime();
+
+                    Date sentDate = new Date();
+
+                    edu.vanderbilt.locom.Location loc = new edu.vanderbilt.locom.Location(mLongitude, mLatitude);
+                    currentBroadcast = new Broadcast(name, description, loc , rad, sentDate, eventDate );
+
+                    // send gson connect message with username and lat/long
+                    String[] tag = {};
+                    InterestTags tags = new InterestTags(tag);
+                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags, null);
+
+                    Gson gson = new Gson();
+
+                    UserSendable us = new UserSendable(u);
+
+                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, us);
+
+                    String jsonStr = gson.toJson(LOCOMmsg);
+
+                    System.out.println(jsonStr);
+
+                    send(jsonStr);
+                }
+            });
 
             Calendar cal = Calendar.getInstance();
-            Date date = cal.getTime();
-            currentBroadcast = new Broadcast("none", "none", null, 10, date,date );
+            Date date = new Date();
+
+
+
             return rootView;
         }
 
