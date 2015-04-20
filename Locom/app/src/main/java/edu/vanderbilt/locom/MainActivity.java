@@ -598,7 +598,7 @@ public class MainActivity extends ActionBarActivity
             tagsArr = itags.getTags().toArray(tagsArr);
             String allTags = "";
             for (int i = 0; i < itags.getSize(); i++) {
-                allTags += "\n" + tagsArr[i];
+                allTags += tagsArr[i] + "\n";
                 tag1.setText(allTags);
             }
 
