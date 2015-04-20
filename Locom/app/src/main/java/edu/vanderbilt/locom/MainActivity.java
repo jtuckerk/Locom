@@ -466,6 +466,16 @@ public class MainActivity extends ActionBarActivity
         super.onStop();
     }
 
+    // takes you back to homescreen
+    public void backHome() {
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, HomeScreenFragment.newInstance(1))
+                        .commit();
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
