@@ -1,5 +1,7 @@
 package edu.vanderbilt.locom;
 
+import android.nfc.Tag;
+
 import java.io.PrintWriter;
 
 public class User {
