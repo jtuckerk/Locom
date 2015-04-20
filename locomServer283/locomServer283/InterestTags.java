@@ -21,7 +21,11 @@ public class InterestTags {
 	public Boolean hasInterests(InterestTags tags){
 		
 		String[] tagArray = tags.tags.toArray(new String[tags.tags.size()]);
+		
+		System.out.println("checking interests");
+		System.out.println("interests: "+ tagArray.toString());
 		for (String tag: tagArray){
+			System.out.println("iterating through tags: " + tag);
 			if (this.tags.contains(tag)){
 				return true;
 			}
