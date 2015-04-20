@@ -37,4 +37,8 @@ public class InterestTags {
 	public Set<String> getTagsSet(){
 		return this.tags;
 	}
+	public void printUserInterests(){
+		String[] tagArrayUser = this.tags.toArray(new String[this.tags.size()]);
+		System.out.println("User Interests: "+ Arrays.toString(tagArrayUser));
+	}
 }

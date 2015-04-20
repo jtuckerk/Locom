@@ -128,6 +128,7 @@ public class UserThread extends Thread {
 			break;
 		case "update":
 			update(message.user);
+			this.user.tags.printUserInterests();
 			break;
 		case "broadcast":
 			broadcast(message.broadcast, msg);
@@ -152,6 +153,7 @@ public class UserThread extends Thread {
 		
 		//@@checking?
 		this.user = new User(upUser.userName, upUser.locomLocation, upUser.tags, this.user.outStream);
+		upUser.tags.printUserInterests();
 		
 	}
 	public void broadcast(Broadcast receivedcast, String msg){
