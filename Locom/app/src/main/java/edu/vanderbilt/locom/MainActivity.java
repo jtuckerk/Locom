@@ -851,6 +851,7 @@ public class MainActivity extends ActionBarActivity
             latEntry = (TextView) rootView.findViewById(R.id.LatEntryLogin);
             demoLocation = (CheckBox) rootView.findViewById(R.id.custLoc);
 
+            /*
             bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id)
@@ -863,6 +864,7 @@ public class MainActivity extends ActionBarActivity
 
                 }
             });
+            */
 
 
             // assign OnClickListener to user login
@@ -921,6 +923,10 @@ public class MainActivity extends ActionBarActivity
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     selectBCast(position);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, BroadcastViewFragment.newInstance(position))
+                            .commit();
                 }
             });
 
