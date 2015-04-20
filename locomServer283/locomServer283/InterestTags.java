@@ -22,9 +22,10 @@ public class InterestTags {
 	public Boolean hasInterests(InterestTags tagsCheck){
 		
 		String[] tagArray = tagsCheck.getTagsSet().toArray(new String[tagsCheck.getTagsSet().size()]);
-		
+		String[] tagArrayUser = this.tags.toArray(new String[this.tags.size()]);
 		System.out.println("checking interests");
-		System.out.println("interests: "+ Arrays.toString(tagArray));
+		System.out.println("tags: "+ Arrays.toString(tagArray));
+		System.out.println("User Interests: "+ Arrays.toString(tagArrayUser));
 		for (String tag: tagArray){
 			System.out.println("iterating through tags: " + tag);
 			if (this.tags.contains(tag)){
