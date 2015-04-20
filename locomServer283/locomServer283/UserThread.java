@@ -21,7 +21,7 @@ public class UserThread extends Thread {
 	private Broadcasts broadcasts;
 
 	// contains the user information for the user connected to this thread
-	// User info: location
+	// User info: locomLocation
 	// tags
 	// username
 	private User user;
@@ -36,7 +36,7 @@ public class UserThread extends Thread {
 
 		System.out.println("Userthread created: " + this.getId());
 
-		this.user = new User("Unset", new Location(1.1, 1.1), new InterestTags(defaultInterest), outStream);
+		this.user = new User("Unset", new LocomLocation(1.1, 1.1), new InterestTags(defaultInterest), outStream);
 
 	}
 
@@ -140,7 +140,7 @@ public class UserThread extends Thread {
 	
 	public void connect(UserSendable connectUser){
 		System.out.println("connecting user: " );
-		this.user = new User(connectUser.userName, connectUser.location, connectUser.tags, this.user.outStream);
+		this.user = new User(connectUser.userName, connectUser.locomLocation, connectUser.tags, this.user.outStream);
 		
 		synchronized(this.AppUsers){
 			this.AppUsers.addUser(this.user);
@@ -151,7 +151,7 @@ public class UserThread extends Thread {
 		System.out.println("updating user: " );
 		
 		//@@checking?
-		this.user = new User(upUser.userName, upUser.location, upUser.tags, this.user.outStream);
+		this.user = new User(upUser.userName, upUser.locomLocation, upUser.tags, this.user.outStream);
 		
 	}
 	public void broadcast(Broadcast receivedcast, String msg){

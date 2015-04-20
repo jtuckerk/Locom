@@ -5,14 +5,14 @@ import java.io.PrintWriter;
 public class User {
 
 	public String userName;
-	public Location location;
+	public LocomLocation locomLocation;
 	public InterestTags tags;
 	public PrintWriter outStream;
 	//@@ maybe not public
 	
-    public User(String userName, Location location, InterestTags tags, PrintWriter outStream) {
+    public User(String userName, LocomLocation locomLocation, InterestTags tags, PrintWriter outStream) {
 	this.userName = userName;
-	this.location = location;
+	this.locomLocation = locomLocation;
 	this.tags = tags;
 	this.outStream = outStream;
 	
@@ -23,9 +23,9 @@ public class User {
     	return this.userName;
     }
     
-    public Boolean inRange(Location location, double radius){
+    public Boolean inRange(LocomLocation locomLocation, double radius){
 		
-    	return this.location.inRange(location, radius);
+    	return this.locomLocation.inRange(locomLocation, radius);
     }
     
     public Boolean isInterested(String[] tags){

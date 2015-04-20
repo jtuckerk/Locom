@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,7 +65,7 @@ public class MainActivity extends ActionBarActivity
     // Google play
     GoogleApiClient mGoogleApiClient;
 
-    // store location, latitude, and longitude
+    // store locomLocation, latitude, and longitude
     Location mLastLocation;
     String mLatitudeText = "";
     String mLongitudeText = "";
@@ -77,7 +76,7 @@ public class MainActivity extends ActionBarActivity
 
     String[] tag = {};
     static InterestTags tags = new InterestTags(new String[]{});
-    static UserSendable user = new UserSendable("unset", new edu.vanderbilt.locom.Location(0.0, 0.0), tags);
+    static UserSendable user = new UserSendable("unset", new LocomLocation(0.0, 0.0), tags);
     static Broadcasts broadcasts = new Broadcasts();
 
 
@@ -123,7 +122,7 @@ public class MainActivity extends ActionBarActivity
         connect();
     }
 
-    /* Connects to Google Play and enables location services*/
+    /* Connects to Google Play and enables locomLocation services*/
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -556,7 +555,12 @@ public class MainActivity extends ActionBarActivity
         TextView otherEntry;
         Button sendBcast;
         TextView radius;
+        CheckBox currentLocation;
+        TextView longEntry;
+        TextView latEntry;
+
         View rootV;
+
 
         Broadcast currentBroadcast;
         /**
@@ -597,6 +601,9 @@ public class MainActivity extends ActionBarActivity
             otherEntry = (TextView) rootView.findViewById(R.id.otherEntry);
             sendBcast = (Button) rootView.findViewById(R.id.sendBCast);
             radius = (TextView) rootView.findViewById(R.id.radius);
+            longEntry = (TextView) rootView.findViewById(R.id.longitudeEntry);
+            latEntry = (TextView) rootView.findViewById(R.id.latitudeEntry);
+            currentLocation = (CheckBox) rootView.findViewById(R.id.currentLocation);
 
             sendBcast.setOnClickListener(new View.OnClickListener() {
 
@@ -630,6 +637,14 @@ public class MainActivity extends ActionBarActivity
                         rad = Integer.parseInt(radStr);
                     }
 
+                    double longitude = mLongitude;
+                    double latitude = mLatitude;
+                    if (!currentLocation.isChecked() && longEntry.getText().toString() != ""
+                            && latEntry.getText().toString() != ""){
+                        longitude = Double.parseDouble(longEntry.getText().toString());
+                        latitude = Double.parseDouble(latEntry.getText().toString());
+                    }
+
 
                     Calendar cal = Calendar.getInstance();
                     cal.set(year, month, day, hour, minute, second);
@@ -638,7 +653,7 @@ public class MainActivity extends ActionBarActivity
 
                     Date sentDate = new Date();
 
-                    edu.vanderbilt.locom.Location loc = new edu.vanderbilt.locom.Location(mLongitude, mLatitude);
+                    LocomLocation loc = new LocomLocation(longitude, latitude);
 
                     List<String> interestList = new ArrayList();
                     if (foodCheck.isChecked()) {
@@ -754,7 +769,7 @@ public class MainActivity extends ActionBarActivity
                     // send gson connect message with username and lat/long
                     String[] tag = {};
                     InterestTags tags = new InterestTags(tag);
-                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags, null);
+                    User u = new User(name, new LocomLocation(mLongitude, mLatitude), tags, null);
 
                     Gson gson = new Gson();
 

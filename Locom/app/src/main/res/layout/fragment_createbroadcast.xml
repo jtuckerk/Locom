@@ -41,7 +41,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:layout_width="156dp"
@@ -49,7 +49,8 @@
                     android:inputType="textPersonName"
                     android:text="Name"
                     android:ems="10"
-                    android:id="@+id/eventNameEntry" />
+                    android:id="@+id/eventNameEntry"
+                    android:background="#DADADA"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -63,7 +64,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/radius" />
+                    android:id="@+id/radius"
+                    android:background="#DADADA"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -78,7 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Event Description"
+                android:text="Event Description:"
+                android:layout_above="@id/eventNameEntry"
+                android:padding="10sp"
                 android:id="@+id/textView3" />
 
             <EditText
@@ -86,7 +90,9 @@
                 android:layout_height="150dp"
                 android:inputType="textMultiLine"
                 android:ems="10"
-                android:id="@+id/descriptionEntry" />
+                android:id="@+id/descriptionEntry"
+                android:padding="10sp"
+                android:background="#DADADA"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,7 +102,8 @@
                 android:id="@+id/textView6" />
 
             <DatePicker
-                android:layout_width="wrap_content"
+                android:calendarViewShown="false"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/datePicker" />
 
@@ -140,20 +147,82 @@
                 android:id="@+id/puppies"
                 android:checked="false" />
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other    "
+                    android:id="@+id/other"
+                    android:checked="false" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="something cool"
+                    android:ems="10"
+                    android:id="@+id/otherEntry"
+                    android:background="#DADADA"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Location:"
+                android:id="@+id/textView11" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Longitude:"
+                    android:id="@+id/textView13" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/longitudeEntry"
+                    android:background="#DADADA"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Latitude"
+                    android:id="@+id/textView12" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/latitudeEntry"
+                    android:background="#DADADA"/>
+            </LinearLayout>
+
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Other"
-                android:id="@+id/other"
-                android:checked="false" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:text="something cool"
-                android:ems="10"
-                android:id="@+id/otherEntry" />
+                android:text="Use Current Location"
+                android:id="@+id/currentLocation" />
 
         </LinearLayout>
     </ScrollView>

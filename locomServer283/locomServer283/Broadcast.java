@@ -7,23 +7,23 @@ public class Broadcast {
 
 	private String title;
 	private String message;
-	private Location location;
+	private LocomLocation locomLocation;
 	private Double radius;
 	private static Date sentDate;
 	private Date eventDate;
 	private Date timeoutDate;
 	
-	public Broadcast(String title, String message, Location location, double radius, Date eventDate, Date sentDate, Date timeoutDate){
+	public Broadcast(String title, String message, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate, Date timeoutDate){
 		this.title = title;
 		this.message = message;
-		this.location = location;
+		this.locomLocation = locomLocation;
 		this.radius = radius;
 		this.sentDate = sentDate;
 		this.eventDate = eventDate;
 		this.timeoutDate = timeoutDate;
 	}
-	public Broadcast(String title, String message, Location location, double radius, Date eventDate, Date sentDate){
-		this(title, message, location, radius, eventDate, sentDate, defaultTimeout(sentDate));
+	public Broadcast(String title, String message, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate){
+		this(title, message, locomLocation, radius, eventDate, sentDate, defaultTimeout(sentDate));
 	}
 	private static Date defaultTimeout(Date sendDate){
 		
@@ -38,8 +38,8 @@ public class Broadcast {
 		return this.timeoutDate;
 	}
 	
-	public Location getLocation(){
-		return this.location;
+	public LocomLocation getLocation(){
+		return this.locomLocation;
 	}
 	public double getRadius(){
 		return this.radius;

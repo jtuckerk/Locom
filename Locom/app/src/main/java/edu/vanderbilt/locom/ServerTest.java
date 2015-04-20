@@ -24,7 +24,7 @@ public class ServerTest {
 			
 			String [] tag = {"babies","free","food"};
 			InterestTags tags = new InterestTags(tag);
-			User u = new User("UserA", new Location(15.5, 15.5), tags , null);
+			User u = new User("UserA", new LocomLocation(15.5, 15.5), tags , null);
 			
 			Gson gson = new Gson();
 			

@@ -8,25 +8,25 @@ public class Broadcast {
 
 	private String title;
 	private String message;
-	private Location location;
+	private LocomLocation locomLocation;
 	private Double radius;
 	private static Date sentDate;
 	private Date eventDate;
 	private Date timeoutDate;
     private InterestTags tags;
 	
-	public Broadcast(String title, String message, InterestTags tags, Location location, double radius, Date eventDate, Date sentDate, Date timeoutDate){
+	public Broadcast(String title, String message, InterestTags tags, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate, Date timeoutDate){
 		this.title = title;
 		this.message = message;
         this.tags = tags;
-		this.location = location;
+		this.locomLocation = locomLocation;
 		this.radius = radius;
 		this.sentDate = sentDate;
 		this.eventDate = eventDate;
 		this.timeoutDate = timeoutDate;
 	}
-	public Broadcast(String title, String message, InterestTags tags, Location location, double radius, Date eventDate, Date sentDate){
-		this(title, message, tags, location, radius, eventDate, sentDate, defaultTimeout(sentDate));
+	public Broadcast(String title, String message, InterestTags tags, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate){
+		this(title, message, tags, locomLocation, radius, eventDate, sentDate, defaultTimeout(sentDate));
 	}
 	private static Date defaultTimeout(Date sentDate){
 		Calendar cal = new GregorianCalendar();
@@ -43,8 +43,8 @@ public class Broadcast {
 		return this.timeoutDate;
 	}
 	
-	public Location getLocation(){
-		return this.location;
+	public LocomLocation getLocomLocation(){
+		return this.locomLocation;
 	}
 	public double getRadius(){
 		return this.radius;
