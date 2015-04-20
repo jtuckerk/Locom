@@ -33,7 +33,7 @@ public class UserThread extends Thread {
 		this.AppUsers = users;
 		this.broadcasts = broadcasts;
 		String[] defaultInterest = {"Locom"};
-
+		
 		System.out.println("Userthread created: " + this.getId());
 
 		this.user = new User("Unset", new LocomLocation(1.1, 1.1), new InterestTags(defaultInterest), outStream);
@@ -49,6 +49,9 @@ public class UserThread extends Thread {
 			this.inStream = new BufferedReader(new InputStreamReader(
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
+	    	outStream.println("sdgsdfd");
+	    	outStream.flush();
+			this.user.send("hello");
 			String line;
 			if (LocomServer.shutdown) {
 				this.outStream.println("Bank is Closed");
@@ -127,7 +130,9 @@ public class UserThread extends Thread {
 			connect(message.user);
 			break;
 		case "update":
+			this.user.send("hello, update received before");
 			update(message.user);
+			this.user.send("hello, update received after");
 			break;
 		case "broadcast":
 			broadcast(message.broadcast, msg);
@@ -151,7 +156,10 @@ public class UserThread extends Thread {
 		System.out.println("updating user: " );
 		
 		//@@checking?
+		AppUsers.removeUser(this.user);
 		this.user = new User(upUser.userName, upUser.locomLocation, upUser.tags, this.user.outStream);
+		AppUsers.addUser(this.user);
+		
 		
 	}
 	public void broadcast(Broadcast receivedcast, String msg){
@@ -162,13 +170,9 @@ public class UserThread extends Thread {
 		}
 		
 		for (User u: this.AppUsers.users){
-			System.out.println("iterating through user");
-			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) ){
-				System.out.println("user: " + u.userName + "is in range");
-			}
-			if (u.isInterested(receivedcast.getTags())){
-				System.out.println("user: " + u.userName + "is interested");
-			}
+
+			System.out.println("in broadcast forward user is interested in: ");
+			u.tags.printUserInterests();
 			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags())){
 				u.send(msg);
 				System.out.println("broadcast forwarded");

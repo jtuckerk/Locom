@@ -27,7 +27,6 @@ public class User {
     }
     
     public Boolean isInterested(InterestTags tags){
-    	
     	//returns true if any tags match else returns false
     	return this.tags.hasInterests(tags);
     }
