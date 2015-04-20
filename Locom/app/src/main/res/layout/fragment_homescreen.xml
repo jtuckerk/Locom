@@ -42,6 +42,12 @@
             android:text="Demo Location"
             android:id="@+id/textView4" />
 
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use Custom Location"
+            android:id="@+id/custLoc" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +95,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/loginView"
-        android:layout_alignEnd="@+id/loginView">
+        android:layout_alignEnd="@+id/loginView"
+        android:id="@+id/homeView">
 
         <ListView
             android:layout_width="wrap_content"

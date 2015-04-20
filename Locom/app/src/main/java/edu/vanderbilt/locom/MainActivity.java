@@ -73,6 +73,7 @@ public class MainActivity extends ActionBarActivity
     static Double mLatitude = 0.0;
     static Double mLongitude = 0.0;
 
+    static boolean hasLoggedIn = false;
 
     String[] tag = {};
     static InterestTags tags = new InterestTags(new String[]{});
@@ -687,13 +688,14 @@ public class MainActivity extends ActionBarActivity
                     boolean properBroadcast = true;
 
                     String radStr = radius.getText().toString();
+                    Log.i(TAG, "radStr=" +radStr);
                     int rad = 500;
                     if (radStr == "" || name == "" || description == ""){
                         Toast.makeText(getActivity(),
                                 "Incomplete Fields", Toast.LENGTH_SHORT).show();
                         properBroadcast = false;
                     }
-                    if (radStr == ""){
+                    if (radStr == "" || radStr == null || radius.getText().length() == 0){
                         Toast.makeText(getActivity(),
                                 "Incomplete Fields", Toast.LENGTH_SHORT).show();
                         properBroadcast = false;
@@ -785,6 +787,10 @@ public class MainActivity extends ActionBarActivity
         EditText etName;
         View loginView;
         ListView bCastList;
+        TextView longEntry;
+        TextView latEntry;
+        CheckBox demoLocation;
+        View homeView;
 
         /**
          * The fragment argument representing the section number for this
@@ -816,8 +822,12 @@ public class MainActivity extends ActionBarActivity
             bConnect = (Button) rootView.findViewById(R.id.connectButton);
             etName = (EditText) rootView.findViewById(R.id.etName);
             loginView = (View) rootView.findViewById(R.id.loginView);
+            homeView = (View) rootView.findViewById(R.id.homeView);
             bCastList = (ListView) rootView.findViewById(R.id.bCastListView);
             createBCast = (Button) rootView.findViewById(R.id.createBCastButton);
+            longEntry = (TextView) rootView.findViewById(R.id.longEntryLogin);
+            latEntry = (TextView) rootView.findViewById(R.id.LatEntryLogin);
+            demoLocation = (CheckBox) rootView.findViewById(R.id.custLoc);
 
             // assign OnClickListener to user login
             bConnect.setOnClickListener(new View.OnClickListener() {
@@ -831,6 +841,11 @@ public class MainActivity extends ActionBarActivity
                     String name;
                     name = etName.getText().toString();
 
+                    if (demoLocation.isChecked() && latEntry.getText().toString() != "" &&
+                            longEntry.getText().toString() != ""){
+                        mLatitude = Double.parseDouble(latEntry.getText().toString());
+                        mLongitude = Double.parseDouble(longEntry.getText().toString());
+                    }
                     // send gson connect message with username and lat/long
                     String[] tag = {};
                     InterestTags tags = new InterestTags(tag);
@@ -847,8 +862,10 @@ public class MainActivity extends ActionBarActivity
                     System.out.println(jsonStr);
 
                     send(jsonStr);
+                    hasLoggedIn = true;
 
                     hideUserLogin();
+                    homeView.setVisibility(View.VISIBLE);
                 }
             });
 
@@ -890,6 +907,14 @@ public class MainActivity extends ActionBarActivity
 
             // find UI elements defined in xml
             rootV = rootView;
+
+            if (hasLoggedIn){
+                hideUserLogin();
+            }
+            else{
+                homeView.setVisibility(View.GONE);
+            }
+            
             return rootView;
         }
 
@@ -907,10 +932,10 @@ public class MainActivity extends ActionBarActivity
 
         public void hideUserLogin() {
 
-            rootV.findViewById(R.id.loginView).setVisibility(View.GONE);
-            //rootV.findViewById(R.id.connectButton).setVisibility(View.GONE);
-            //rootV.findViewById(R.id.etName).setVisibility(View.GONE);
-            //rootV.findViewById(R.id.textView5);
+            if (rootV.findViewById(R.id.loginView).getVisibility() != View.GONE) {
+                rootV.findViewById(R.id.loginView).setVisibility(View.GONE);
+            }
+
         }
     }
 
