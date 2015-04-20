@@ -49,9 +49,9 @@ public class UserThread extends Thread {
 			this.inStream = new BufferedReader(new InputStreamReader(
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
-	    	outStream.println("sdgsdfd");
+	    	outStream.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	    	outStream.flush();
-			this.user.send("hello");
+			
 			String line;
 			if (LocomServer.shutdown) {
 				this.outStream.println("Bank is Closed");
