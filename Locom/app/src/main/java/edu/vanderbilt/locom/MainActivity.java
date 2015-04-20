@@ -23,7 +23,6 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -53,9 +52,6 @@ public class MainActivity extends ActionBarActivity
     // Request code to use when launching the resolution activity
     private static final int REQUEST_RESOLVE_ERROR = 1001;
 
-    // Unique tag for the error dialog fragment
-    //private static final String DIALOG_ERROR = "dialog_error";
-
     // Bool to track whether the app is already resolving an error
     private boolean mResolvingError = false;
 
@@ -69,13 +65,12 @@ public class MainActivity extends ActionBarActivity
     Location mLastLocation;
     String mLatitudeText = "";
     String mLongitudeText = "";
-
     static Double mLatitude = 0.0;
     static Double mLongitude = 0.0;
 
     static boolean hasLoggedIn = false;
 
-    String[] tag = {};
+    // store interest tags
     static InterestTags tags = new InterestTags(new String[]{});
     static UserSendable user = new UserSendable("unset", new LocomLocation(0.0, 0.0), tags);
     static Broadcasts broadcasts = new Broadcasts();
@@ -101,7 +96,6 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     static private CharSequence mTitle;
-    private int ConnectButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -318,6 +312,7 @@ public class MainActivity extends ActionBarActivity
                         if (socket != null)
                             socket.close();
                     } catch (IOException e) {
+                        // catch
                     }
                 }
                 Log.i(TAG, "Receive task finished");
@@ -330,9 +325,7 @@ public class MainActivity extends ActionBarActivity
                 // guaranteed to be not null
                 String msg = lines[0];
 
-                // if we haven't returned yet, tell the user that we have an unhandled message
-                // Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
-
+                // put received message in gson format - always type broadcast
                 Gson gson = new Gson();
                 System.out.println("raw message received: " + msg);
 
@@ -340,10 +333,12 @@ public class MainActivity extends ActionBarActivity
                 if (message.type == null) {
                     message.type = "";
                 } else if (message.type.equals("broadcast")) {
-                    Toast.makeText(getApplicationContext(), "Incoming Broadcast: " + message.broadcast.getTitle(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Incoming Broadcast: " +
+                            message.broadcast.getTitle(), Toast.LENGTH_SHORT).show();
                     broadcasts.add(message.broadcast);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Cannot handle incoming message", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Cannot handle incoming message",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -363,7 +358,6 @@ public class MainActivity extends ActionBarActivity
                 }
                 // make sure that we close the output, not the input
                 if (out != null) {
-                    //out.print("BYE");
                     out.flush();
                     out.close();
                 }
@@ -396,11 +390,6 @@ public class MainActivity extends ActionBarActivity
 
             @Override
             protected void onPostExecute(Boolean error) {
-                if (!error) {
-                    // Toast.makeText(getApplicationContext(),"Message sent to server", Toast.LENGTH_SHORT).show();
-                } else {
-                    //  Toast.makeText(getApplicationContext(),"Error sending message to server",Toast.LENGTH_SHORT).show();
-                }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, msg);
 
@@ -410,23 +399,26 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onConnected(Bundle bundle) {
         // Connected to Google Play services!
+        // get location
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
+
         if (mLastLocation != null) {
             mLatitudeText = String.valueOf(mLastLocation.getLatitude());
-            mLatitude = Double.valueOf(mLastLocation.getLatitude());
+            mLatitude = mLastLocation.getLatitude();
             mLongitudeText = String.valueOf(mLastLocation.getLongitude());
-            mLongitude = Double.valueOf(mLastLocation.getLongitude());
+            mLongitude = mLastLocation.getLongitude();
         }
+
         Log.i(TAG, "Latitude " + mLatitudeText);
         Log.i(TAG, "Longitude " + mLongitudeText);
 
-        // send server latitude and longitude
-        if (connected) {
+        // send server latitude and longitude - groupcast test
+       // if (connected) {
             //send("NAME,locom");
             //
             // send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
-        }
+        //}
     }
 
     @Override
@@ -438,7 +430,7 @@ public class MainActivity extends ActionBarActivity
     public void onConnectionFailed(ConnectionResult result) {
         if (mResolvingError) {
             // Already attempting to resolve an error.
-            return;
+            //return;
         } else if (result.hasResolution()) {
             try {
                 mResolvingError = true;
@@ -448,8 +440,6 @@ public class MainActivity extends ActionBarActivity
                 mGoogleApiClient.connect();
             }
         } else {
-            // Show dialog using GooglePlayServicesUtil.getErrorDialog()
-            //showErrorDialog(result.getErrorCode());
             mResolvingError = true;
         }
     }
@@ -469,46 +459,9 @@ public class MainActivity extends ActionBarActivity
     }
 
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
-    }
-
+    /********************************************************************************************
+     * BROADCASTVIEW FRAGMENT- show details of selected broadcast message
+     *******************************************************************************************/
     public static class BroadcastViewFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
@@ -532,8 +485,10 @@ public class MainActivity extends ActionBarActivity
         Button backHome;
         View rootV;
 
+        // selected broadcast
         Broadcast currentBroadcast;
 
+        // to keep track of which broadcast chosen from list
         static int num = 0;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -560,6 +515,7 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_broadcastview, container, false);
             rootV = rootView;
 
+            // find all xml elements
             eventName = (TextView) rootView.findViewById(R.id.eventName);
             eventNameEntry = (TextView) rootView.findViewById(R.id.eventNameEntry);
             distance = (TextView) rootView.findViewById(R.id.distance);
@@ -575,7 +531,10 @@ public class MainActivity extends ActionBarActivity
             tag1 = (TextView) rootView.findViewById(R.id.tag1);
             backHome = (Button) rootView.findViewById(R.id.backHome);
 
+            // save selected broadcast
             currentBroadcast = broadcasts.getList().get(num);
+
+            // display broadcast parts:
 
             // entry title and description
             descriptionEntry.setText(currentBroadcast.getMessageBody());
@@ -613,10 +572,8 @@ public class MainActivity extends ActionBarActivity
                             .commit();
 
                     mTitle = getString(R.string.title_section1);
-
                 }
             });
-
 
             return rootView;
         }
@@ -629,7 +586,13 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    /*******************************************************************************************
+     * CREATEBROADCAST FRAGMENT- allow user to send a broadcast message by filling in
+     *                            appropriate fields
+     *******************************************************************************************/
     public static class CreateBroadcastFragment extends Fragment {
+
+        // UI elements
         DatePicker dPicker;
         TimePicker tPicker;
         TextView titleEntry;
@@ -647,8 +610,9 @@ public class MainActivity extends ActionBarActivity
 
         View rootV;
 
-
+        // hold broadcast being created
         Broadcast currentBroadcast;
+
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -676,6 +640,7 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_createbroadcast, container, false);
             rootV = rootView;
 
+            // find UI elements
             dPicker = (DatePicker) rootView.findViewById(R.id.datePicker);
             tPicker = (TimePicker) rootView.findViewById(R.id.timePicker);
             titleEntry = (TextView) rootView.findViewById(R.id.eventNameEntry);
@@ -691,22 +656,30 @@ public class MainActivity extends ActionBarActivity
             latEntry = (TextView) rootView.findViewById(R.id.latitudeEntry);
             currentLocation = (CheckBox) rootView.findViewById(R.id.currentLocation);
 
+            // on click listener for sendBcast button (pushed after filling fields)
             sendBcast.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
+                    // event name
                     String name = titleEntry.getText().toString();
 
+                    // event description
                     String description = descriptionEntry.getText().toString();
+
+                    // event date and time
                     int day = dPicker.getDayOfMonth();
                     int month = dPicker.getMonth();
                     int year = dPicker.getYear();
                     int hour = tPicker.getCurrentHour();
                     int minute = tPicker.getCurrentMinute();
                     int second = 0;
+
+                    // now safe to push button to send
                     boolean properBroadcast = true;
 
+                    // distance
                     String radStr = radius.getText().toString();
                     Log.i(TAG, "radStr=" + radStr);
                     int rad = 500;
@@ -723,6 +696,7 @@ public class MainActivity extends ActionBarActivity
                         rad = Integer.parseInt(radStr);
                     }
 
+                    // location
                     double longitude = mLongitude;
                     double latitude = mLatitude;
                     if (!currentLocation.isChecked() && !longEntry.getText().toString().equals("")
@@ -731,7 +705,7 @@ public class MainActivity extends ActionBarActivity
                         latitude = Double.parseDouble(latEntry.getText().toString());
                     }
 
-
+                    // sent date and time
                     Calendar cal = Calendar.getInstance();
                     cal.set(year, month, day, hour, minute, second);
 
@@ -739,8 +713,10 @@ public class MainActivity extends ActionBarActivity
 
                     Date sentDate = new Date();
 
+                    // create new locomlocation with long, lat
                     LocomLocation loc = new LocomLocation(longitude, latitude);
 
+                    // tags
                     List<String> interestList = new ArrayList();
                     if (foodCheck.isChecked()) {
                         interestList.add("food");
@@ -767,6 +743,7 @@ public class MainActivity extends ActionBarActivity
                         return;
                     }
 
+                    // create new message of broadcast type
                     String[] strArr = new String[interestList.size()];
                     strArr = interestList.toArray(strArr);
                     InterestTags tags = new InterestTags(strArr);
@@ -780,6 +757,7 @@ public class MainActivity extends ActionBarActivity
 
                     send(jsonStr);
 
+                    // go back to home screen once message sent
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
@@ -787,10 +765,6 @@ public class MainActivity extends ActionBarActivity
                     mTitle = getString(R.string.title_section1);
                 }
             });
-
-            Calendar cal = Calendar.getInstance();
-            Date date = new Date();
-
 
             return rootView;
         }
@@ -803,9 +777,13 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    /********************************************************************************************
+     * HOMESCREEN FRAGMENT- show all available messages, button to create broadcast
+     *                      on first open, show login screen
+     *******************************************************************************************/
     public static class HomeScreenFragment extends Fragment {
 
-        // UI
+        // UI elements
         View rootV;
         Button bConnect;
         Button createBCast;
@@ -843,11 +821,11 @@ public class MainActivity extends ActionBarActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_homescreen, container, false);
 
-
+            // find UI elements
             bConnect = (Button) rootView.findViewById(R.id.connectButton);
             etName = (EditText) rootView.findViewById(R.id.etName);
-            loginView = (View) rootView.findViewById(R.id.loginView);
-            homeView = (View) rootView.findViewById(R.id.homeView);
+            loginView = rootView.findViewById(R.id.loginView);
+            homeView = rootView.findViewById(R.id.homeView);
             bCastList = (ListView) rootView.findViewById(R.id.bCastListView);
             createBCast = (Button) rootView.findViewById(R.id.createBCastButton);
             longEntry = (TextView) rootView.findViewById(R.id.longEntryLogin);
@@ -855,6 +833,7 @@ public class MainActivity extends ActionBarActivity
             demoLocation = (CheckBox) rootView.findViewById(R.id.custLoc);
 
 
+            // on click listener for listview bCastList
             bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id)
@@ -869,25 +848,24 @@ public class MainActivity extends ActionBarActivity
             });
 
 
-
             // assign OnClickListener to user login
             bConnect.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                    //       mGoogleApiClient);
-
+                    // user name
                     String name;
                     name = etName.getText().toString();
 
+                    // can use custom location for demo purposes
                     if (demoLocation.isChecked() && !latEntry.getText().toString().equals("") &&
                             !longEntry.getText().toString().equals("")) {
                         mLatitude = Double.parseDouble(latEntry.getText().toString());
                         mLongitude = Double.parseDouble(longEntry.getText().toString());
                     }
-                    // send gson connect message with username and lat/long
+
+                    // send gson connect message with username and lat/long (tags blank)
                     String[] tag = {};
                     InterestTags tags = new InterestTags(tag);
                     user = new UserSendable(name, new LocomLocation(mLongitude, mLatitude), tags);
@@ -901,6 +879,8 @@ public class MainActivity extends ActionBarActivity
                     System.out.println(jsonStr);
 
                     send(jsonStr);
+
+                    // now hide user login
                     hasLoggedIn = true;
 
                     hideUserLogin();
@@ -908,6 +888,7 @@ public class MainActivity extends ActionBarActivity
                 }
             });
 
+            // onClickListener for creatBCast button
             createBCast.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -919,43 +900,22 @@ public class MainActivity extends ActionBarActivity
 
                 }
             });
-/*
-            bCastList = (ListView) inflater.inflate(
-                    R.layout.fragment_navigation_drawer, container, false);
-            bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    selectBCast(position);
-                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.container, BroadcastViewFragment.newInstance(position))
-                            .commit();
-                }
-            });*/
 
-            List<String> bCastArray = new ArrayList<String>();
+            // bCastList view
+            List<String> bCastArray = new ArrayList<>();
 
+            // fill in list
             for (Iterator<Broadcast> i = broadcasts.getList().iterator(); i.hasNext(); ) {
                 Log.i(TAG, "adding element to bcastlist");
                 bCastArray.add(i.next().getTitle());
             }
 
-
-            String[] strArr = new String[bCastArray.size()];
-            strArr = bCastArray.toArray(strArr);
-            //bCastList.addHeaderView(rootView.findViewById(R.id.textView15));
-
-
-            //String[] strArr = new String[bCastArray.size()];
-          //  strArr = bCastArray.toArray(strArr);
-
-            bCastList.setAdapter(new ArrayAdapter<String>(
+            // show list
+            bCastList.setAdapter(new ArrayAdapter<>(
                     getActivity(),
                     android.R.layout.simple_list_item_activated_1,
-                    //android.R.id.text1,
-                    bCastArray));//strArr));
+                    bCastArray));
 
-            // find UI elements defined in xml
             rootV = rootView;
 
             if (hasLoggedIn) {
@@ -966,12 +926,6 @@ public class MainActivity extends ActionBarActivity
 
             return rootView;
         }
-
-        public void selectBCast(int pos) {
-            Toast.makeText(getActivity(),
-                    "List Item " + pos + " selected", Toast.LENGTH_SHORT).show();
-        }
-
 
         @Override
         public void onAttach(Activity activity) {
@@ -990,14 +944,19 @@ public class MainActivity extends ActionBarActivity
 
     }
 
+    /*********************************************************************************************
+     * TAGS FRAGMENT- allow user to update chosen interest tags
+     ********************************************************************************************/
     public static class tagsFragment extends Fragment {
 
+        // UI elements
         CheckBox foodCheck;
         CheckBox musicCheck;
         CheckBox puppiesCheck;
         CheckBox otherCheck;
         TextView otherEntry;
         Button sendTags;
+
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -1025,7 +984,7 @@ public class MainActivity extends ActionBarActivity
 
             View rootView = inflater.inflate(R.layout.fragment_tags, container, false);
 
-
+            // find UI elements
             foodCheck = (CheckBox) rootView.findViewById(R.id.food);
             musicCheck = (CheckBox) rootView.findViewById(R.id.music);
             puppiesCheck = (CheckBox) rootView.findViewById(R.id.puppies);
@@ -1033,6 +992,7 @@ public class MainActivity extends ActionBarActivity
             otherEntry = (TextView) rootView.findViewById(R.id.otherEntry);
             sendTags = (Button) rootView.findViewById(R.id.sendTags);
 
+            // onClickListener for sendTags button
             sendTags.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -1057,12 +1017,15 @@ public class MainActivity extends ActionBarActivity
                         }
                     }
 
+                    // add tags to new InterestTags object
                     String[] strArr = new String[interestList.size()];
                     strArr = interestList.toArray(strArr);
                     InterestTags tags = new InterestTags(strArr);
 
+                    // set new tags in user
                     user.setTags(tags);
 
+                    // send gson of type update
                     Gson gson = new Gson();
 
                     LocomGSON LOCOMmsg = new LocomGSON("update", null, user);
@@ -1073,6 +1036,7 @@ public class MainActivity extends ActionBarActivity
 
                     send(jsonStr);
 
+                    // back to homescreen after sent
                     FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
