@@ -127,8 +127,9 @@ public class UserThread extends Thread {
 			connect(message.user);
 			break;
 		case "update":
+			this.user.send("hello, update received before");
 			update(message.user);
-			this.user.tags.printUserInterests();
+			this.user.send("hello, update received after");
 			break;
 		case "broadcast":
 			broadcast(message.broadcast, msg);
@@ -155,7 +156,7 @@ public class UserThread extends Thread {
 		AppUsers.removeUser(this.user);
 		this.user = new User(upUser.userName, upUser.locomLocation, upUser.tags, this.user.outStream);
 		AppUsers.addUser(this.user);
-		upUser.tags.printUserInterests();
+		
 		
 	}
 	public void broadcast(Broadcast receivedcast, String msg){
