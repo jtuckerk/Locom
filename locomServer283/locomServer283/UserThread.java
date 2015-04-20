@@ -171,6 +171,8 @@ public class UserThread extends Thread {
 			if (u.isInterested(receivedcast.getTags(), u.tags)){
 				System.out.println("user: " + u.userName + "is interested");
 			}
+			System.out.println("in broadcast forward user is interested in: ");
+			u.tags.printUserInterests();
 			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags(), u.tags)){
 				u.send(msg);
 				System.out.println("broadcast forwarded");
