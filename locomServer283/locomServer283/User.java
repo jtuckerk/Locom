@@ -26,12 +26,9 @@ public class User {
     	return this.locomLocation.inRange(locomLocation, radius);
     }
     
-    public Boolean isInterested(InterestTags tags, InterestTags userTags){
-    	
+    public Boolean isInterested(InterestTags tags){
     	//returns true if any tags match else returns false
-    	System.out.println("inside is interested");
-    	this.tags.printUserInterests();
-    	return this.tags.hasInterests(tags, userTags);
+    	return this.tags.hasInterests(tags);
     }
     public void send(String msg){
     	this.outStream.println(msg);

@@ -31,4 +31,8 @@ public class Broadcasts {
 		}
 	}
 	
+	public Set<Broadcast> getSetofBroadcasts(){
+		return this.broadcasts;
+	}
+	
 }

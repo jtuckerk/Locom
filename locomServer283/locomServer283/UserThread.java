@@ -152,7 +152,9 @@ public class UserThread extends Thread {
 		System.out.println("updating user: " );
 		
 		//@@checking?
+		AppUsers.removeUser(this.user);
 		this.user = new User(upUser.userName, upUser.locomLocation, upUser.tags, this.user.outStream);
+		AppUsers.addUser(this.user);
 		upUser.tags.printUserInterests();
 		
 	}
@@ -164,16 +166,10 @@ public class UserThread extends Thread {
 		}
 		
 		for (User u: this.AppUsers.users){
-			System.out.println("iterating through user");
-			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) ){
-				System.out.println("user: " + u.userName + "is in range");
-			}
-			if (u.isInterested(receivedcast.getTags(), u.tags)){
-				System.out.println("user: " + u.userName + "is interested");
-			}
+
 			System.out.println("in broadcast forward user is interested in: ");
 			u.tags.printUserInterests();
-			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags(), u.tags)){
+			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags())){
 				u.send(msg);
 				System.out.println("broadcast forwarded");
 			}
