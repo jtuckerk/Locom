@@ -100,7 +100,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    static private CharSequence mTitle;
     private int ConnectButton;
 
     @Override
@@ -585,8 +585,8 @@ public class MainActivity extends ActionBarActivity
             Date event = currentBroadcast.getEventDate();
             String eventString = event.toString();
             String[] parts = eventString.split(" ");
-            timeEntry.setText(parts[2]);
-            eventDateEntry.setText(parts[0] + " " + parts[1]);
+            timeEntry.setText(parts[3]);
+            eventDateEntry.setText(parts[0] + " " + parts[1] + " " + parts[2]);
 
             // distance from event
             Float dist = user.distanceToBroadcast(currentBroadcast);
@@ -611,6 +611,8 @@ public class MainActivity extends ActionBarActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
                             .commit();
+
+                    mTitle = getString(R.string.title_section1);
 
                 }
             });
@@ -782,6 +784,7 @@ public class MainActivity extends ActionBarActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
                             .commit();
+                    mTitle = getString(R.string.title_section1);
                 }
             });
 
@@ -942,7 +945,7 @@ public class MainActivity extends ActionBarActivity
             bCastList.setAdapter(new ArrayAdapter<String>(
                     getActivity(),
                     android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
+                    //android.R.id.text1,
                     bCastArray));//strArr));
 
             // find UI elements defined in xml
@@ -1067,6 +1070,7 @@ public class MainActivity extends ActionBarActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
                             .commit();
+                    mTitle = getString(R.string.title_section1);
                 }
             });
 
