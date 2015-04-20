@@ -1,5 +1,0 @@
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocomServerTestApp/app/build/intermediates/classes/debug
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocomServerTestApp/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-cbedbe2fd85aeedce212b8373755389af3d817e0.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocomServerTestApp/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-96cf7162d50588961214d5f29a85574b88431fab.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocomServerTestApp/app/build/intermediates/pre-dexed/debug/classes-8da3eebb538ff09133c5217d58e6cd10f651fee5.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocomServerTestApp/app/build/intermediates/pre-dexed/debug/classes-c3a8409b791c6f6fb85c485469dbac71394e0bbe.jar

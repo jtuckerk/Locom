@@ -1,6 +1,0 @@
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocationTest/app/build/intermediates/classes/debug
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocationTest/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-cbedbe2fd85aeedce212b8373755389af3d817e0.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocationTest/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-94455734b3917d0fe335031b6576589e128d51b0.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocationTest/app/build/intermediates/pre-dexed/debug/classes-029c201e04c0a535e6b43ead19cde9cbd84458c9.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocationTest/app/build/intermediates/pre-dexed/debug/classes-d3fa0ed77b7ec2c528d34987380737de49d7ed48.jar
-/Users/tuckerkirven/Desktop/Computer Networks/Locom/LocationTest/app/build/intermediates/pre-dexed/debug/classes-1e30d2d29f8f6825a8c65ce5ff5968f460044ebb.jar
