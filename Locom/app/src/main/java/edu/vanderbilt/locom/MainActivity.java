@@ -76,8 +76,8 @@ public class MainActivity extends ActionBarActivity
 
 
     String[] tag = {};
-    static InterestTags tags = new InterestTags(new String[] {});
-    static UserSendable user = new UserSendable("unset", new edu.vanderbilt.locom.Location(0.0, 0.0),tags);
+    static InterestTags tags = new InterestTags(new String[]{});
+    static UserSendable user = new UserSendable("unset", new edu.vanderbilt.locom.Location(0.0, 0.0), tags);
     static Broadcasts broadcasts = new Broadcasts();
 
 
@@ -122,6 +122,7 @@ public class MainActivity extends ActionBarActivity
         mGoogleApiClient.connect();
         connect();
     }
+
     /* Connects to Google Play and enables location services*/
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -135,7 +136,7 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        switch (position){
+        switch (position) {
             // Home screen- view available messages
             case 0:
                 fragmentManager.beginTransaction()
@@ -269,11 +270,11 @@ public class MainActivity extends ActionBarActivity
 
                     /////////////// for testing with groupcast server //////////////
                     //send("NAME,locom");
-                   // send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
+                    // send("msg,AMy," + mLatitudeText + ", " + mLongitudeText);
 
                 } else {
                     Toast.makeText(getApplicationContext(),
-                            "Could not Connect: \n Exiting" , Toast.LENGTH_SHORT).show();
+                            "Could not Connect: \n Exiting", Toast.LENGTH_SHORT).show();
                     // can't connect: close the activity
                     finish();
                 }
@@ -329,18 +330,18 @@ public class MainActivity extends ActionBarActivity
                 String msg = lines[0];
 
                 // if we haven't returned yet, tell the user that we have an unhandled message
-               // Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "Unhandled message: "+msg, Toast.LENGTH_SHORT).show();
 
                 Gson gson = new Gson();
-                System.out.println("raw message received: "+ msg);
+                System.out.println("raw message received: " + msg);
 
                 LocomGSON message = gson.fromJson(msg, LocomGSON.class);
-                if (message.type == null){
+                if (message.type == null) {
                     message.type = "";
-                }else if (message.type == "broadcast"){
-                    Toast.makeText(getApplicationContext(), "Incoming Broadcast: "+message.broadcast.getTitle(), Toast.LENGTH_SHORT).show();
+                } else if (message.type == "broadcast") {
+                    Toast.makeText(getApplicationContext(), "Incoming Broadcast: " + message.broadcast.getTitle(), Toast.LENGTH_SHORT).show();
                     broadcasts.add(message.broadcast);
-                }else{
+                } else {
                     Toast.makeText(getApplicationContext(), "Cannot handle incoming message", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -367,7 +368,10 @@ public class MainActivity extends ActionBarActivity
                 }
                 // in some rare cases, out can be null, so we need to close the socket itself
                 if (socket != null)
-                    try { socket.close();} catch(IOException ignored) {}
+                    try {
+                        socket.close();
+                    } catch (IOException ignored) {
+                    }
 
                 Log.i(TAG, "Disconnect task finished");
             }
@@ -392,9 +396,9 @@ public class MainActivity extends ActionBarActivity
             @Override
             protected void onPostExecute(Boolean error) {
                 if (!error) {
-                   // Toast.makeText(getApplicationContext(),"Message sent to server", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext(),"Message sent to server", Toast.LENGTH_SHORT).show();
                 } else {
-                  //  Toast.makeText(getApplicationContext(),"Error sending message to server",Toast.LENGTH_SHORT).show();
+                    //  Toast.makeText(getApplicationContext(),"Error sending message to server",Toast.LENGTH_SHORT).show();
                 }
             }
         }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, msg);
@@ -703,6 +707,7 @@ public class MainActivity extends ActionBarActivity
                 public void onClick(View v) {
 
                     String name = titleEntry.getText().toString();
+
                     String description = descriptionEntry.getText().toString();
                     int day = dPicker.getDayOfMonth();
                     int month = dPicker.getMonth();
@@ -710,32 +715,69 @@ public class MainActivity extends ActionBarActivity
                     int hour = tPicker.getCurrentHour();
                     int minute = tPicker.getCurrentMinute();
                     int second = 0;
+                    boolean properBroadcast = true;
 
-                    int rad = Integer.parseInt(radius.getText().toString());
+                    String radStr = radius.getText().toString();
+                    int rad = 500;
+                    if (radStr == "" || name == "" || description == ""){
+                        Toast.makeText(getActivity(),
+                                "Incomplete Fields", Toast.LENGTH_SHORT).show();
+                        properBroadcast = false;
+                    }
+                    if (radStr == ""){
+                        Toast.makeText(getActivity(),
+                                "Incomplete Fields", Toast.LENGTH_SHORT).show();
+                        properBroadcast = false;
+                    }
+                    else {
+                        rad = Integer.parseInt(radStr);
+                    }
+
 
                     Calendar cal = Calendar.getInstance();
-                    cal.set(year,month,day,hour,minute,second);
+                    cal.set(year, month, day, hour, minute, second);
 
                     Date eventDate = cal.getTime();
 
                     Date sentDate = new Date();
 
                     edu.vanderbilt.locom.Location loc = new edu.vanderbilt.locom.Location(mLongitude, mLatitude);
-                    currentBroadcast = new Broadcast(name, description, loc , rad, sentDate, eventDate );
 
-                    // send gson connect message with username and lat/long
-                    String[] tag = {};
-                    InterestTags tags = new InterestTags(tag);
-                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags, null);
+                    List<String> interestList = new ArrayList();
+                    if (foodCheck.isChecked()) {
+                        interestList.add("food");
+                    }
+                    if (puppiesCheck.isChecked()) {
+                        interestList.add("puppies");
+                    }
+                    if (musicCheck.isChecked()) {
+                        interestList.add("music");
+                    }
+                    if (otherCheck.isChecked()) {
+                        if (otherEntry.getText().toString() != "") {
+                            interestList.add(otherEntry.getText().toString());
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "No 'other' listed", Toast.LENGTH_SHORT).show();
+                            properBroadcast = false;
+                        }
+                    }
 
+                    if (!properBroadcast) {
+                        Toast.makeText(getActivity(),
+                                "Broadcast not sent", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    String[] strArr = new String[interestList.size()];
+                    strArr = interestList.toArray(strArr);
+                    InterestTags tags = new InterestTags(strArr);
+                            currentBroadcast = new Broadcast(name, description, tags, loc, rad, sentDate, eventDate);
+
+                    // send gson broadcast
                     Gson gson = new Gson();
-
-                    UserSendable us = new UserSendable(u);
-
-                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, us);
-
+                    LocomGSON LOCOMmsg = new LocomGSON("broadcast", currentBroadcast, null);
                     String jsonStr = gson.toJson(LOCOMmsg);
-
                     System.out.println(jsonStr);
 
                     send(jsonStr);
@@ -744,7 +786,6 @@ public class MainActivity extends ActionBarActivity
 
             Calendar cal = Calendar.getInstance();
             Date date = new Date();
-
 
 
             return rootView;
@@ -795,44 +836,44 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_homescreen, container, false);
 
 
-        bConnect = (Button) rootView.findViewById(R.id.connectButton);
-        etName = (EditText) rootView.findViewById(R.id.etName);
-        loginView = (View) rootView.findViewById(R.id.loginView);
-        bCastList = (ListView) rootView.findViewById(R.id.bCastListView);
-        createBCast = (Button) rootView.findViewById(R.id.createBCastButton);
+            bConnect = (Button) rootView.findViewById(R.id.connectButton);
+            etName = (EditText) rootView.findViewById(R.id.etName);
+            loginView = (View) rootView.findViewById(R.id.loginView);
+            bCastList = (ListView) rootView.findViewById(R.id.bCastListView);
+            createBCast = (Button) rootView.findViewById(R.id.createBCastButton);
 
-        // assign OnClickListener to user login
-        bConnect.setOnClickListener(new View.OnClickListener() {
+            // assign OnClickListener to user login
+            bConnect.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
-                //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                 //       mGoogleApiClient);
+                    //mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                    //       mGoogleApiClient);
 
-                String name;
-                name = etName.getText().toString();
+                    String name;
+                    name = etName.getText().toString();
 
-                // send gson connect message with username and lat/long
-                String [] tag = {};
-                InterestTags tags = new InterestTags(tag);
-                User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags , null);
+                    // send gson connect message with username and lat/long
+                    String[] tag = {};
+                    InterestTags tags = new InterestTags(tag);
+                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags, null);
 
-                Gson gson = new Gson();
+                    Gson gson = new Gson();
 
-                UserSendable us = new UserSendable(u);
+                    UserSendable us = new UserSendable(u);
 
-                LocomGSON LOCOMmsg = new LocomGSON("connect",null,us);
+                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, us);
 
-                String jsonStr = gson.toJson(LOCOMmsg);
+                    String jsonStr = gson.toJson(LOCOMmsg);
 
-                System.out.println(jsonStr);
+                    System.out.println(jsonStr);
 
-                send(jsonStr);
+                    send(jsonStr);
 
-                hideUserLogin();
-            }
-        });
+                    hideUserLogin();
+                }
+            });
 
             createBCast.setOnClickListener(new View.OnClickListener() {
 
@@ -857,7 +898,7 @@ public class MainActivity extends ActionBarActivity
 
             List<String> bCastArray = new ArrayList<String>();
 
-            for (Iterator<Broadcast> i = broadcasts.getList().iterator(); i.hasNext(); ){
+            for (Iterator<Broadcast> i = broadcasts.getList().iterator(); i.hasNext(); ) {
 
                 bCastArray.add(i.next().getTitle());
             }
@@ -874,10 +915,12 @@ public class MainActivity extends ActionBarActivity
             rootV = rootView;
             return rootView;
         }
-        public void selectBCast(int pos){
+
+        public void selectBCast(int pos) {
             Toast.makeText(getActivity(),
                     "List Item " + pos + " selected", Toast.LENGTH_SHORT).show();
         }
+
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
@@ -893,6 +936,7 @@ public class MainActivity extends ActionBarActivity
             //rootV.findViewById(R.id.textView5);
         }
     }
+
     public static class tagsFragment extends Fragment {
 
         RadioButton rb;
