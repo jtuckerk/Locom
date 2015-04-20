@@ -168,10 +168,10 @@ public class UserThread extends Thread {
 			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) ){
 				System.out.println("user: " + u.userName + "is in range");
 			}
-			if (u.isInterested(receivedcast.getTags())){
+			if (u.isInterested(receivedcast.getTags(), u.tags)){
 				System.out.println("user: " + u.userName + "is interested");
 			}
-			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags())){
+			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags(), u.tags)){
 				u.send(msg);
 				System.out.println("broadcast forwarded");
 			}

@@ -19,16 +19,16 @@ public class InterestTags {
 		return this.tags.contains(singleTag);	
 	}
 	
-	public Boolean hasInterests(InterestTags tagsCheck){
+	public Boolean hasInterests(InterestTags tagsCheck, InterestTags userTags){
 		
 		String[] tagArray = tagsCheck.getTagsSet().toArray(new String[tagsCheck.getTagsSet().size()]);
-		String[] tagArrayUser = this.tags.toArray(new String[this.tags.size()]);
+		String[] tagArrayUser = userTags.tags.toArray(new String[userTags.tags.size()]);
 		System.out.println("checking interests");
 		System.out.println("tags: "+ Arrays.toString(tagArray));
 		System.out.println("User Interests: "+ Arrays.toString(tagArrayUser));
 		for (String tag: tagArray){
 			System.out.println("iterating through tags: " + tag);
-			if (this.tags.contains(tag)){
+			if (userTags.tags.contains(tag)){
 				return true;
 			}
 		}
