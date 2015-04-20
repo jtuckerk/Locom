@@ -514,10 +514,10 @@ public class MainActivity extends ActionBarActivity
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static BroadcastViewFragment newInstance(int sectionNumber) {
+        public static BroadcastViewFragment newInstance(int listNum) {
             BroadcastViewFragment fragment = new BroadcastViewFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            args.putInt(ARG_SECTION_NUMBER, listNum);
             fragment.setArguments(args);
             return fragment;
         }
@@ -592,7 +592,7 @@ public class MainActivity extends ActionBarActivity
             otherCheck = (CheckBox) rootView.findViewById(R.id.other);
             otherEntry = (TextView) rootView.findViewById(R.id.otherEntry);
             sendBcast = (Button) rootView.findViewById(R.id.sendBCast);
-            radius = (Button) rootView.findViewById(R.id.radius);
+            radius = (TextView) rootView.findViewById(R.id.radius);
 
             sendBcast.setOnClickListener(new View.OnClickListener() {
 
@@ -754,7 +754,7 @@ public class MainActivity extends ActionBarActivity
 
             List<String> bCastArray = new ArrayList<String>();
 
-            for (Iterator<Broadcast> i = broadcasts.getSet().iterator(); i.hasNext(); ){
+            for (Iterator<Broadcast> i = broadcasts.getList().iterator(); i.hasNext(); ){
 
                 bCastArray.add(i.next().getTitle());
             }

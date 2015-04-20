@@ -1,12 +1,15 @@
 package edu.vanderbilt.locom;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Broadcasts {
 
-	private Set<Broadcast> broadcasts = new HashSet<Broadcast>();
+	private List<Broadcast> broadcasts = new ArrayList<>();
+
 	
 	public Broadcasts(){
 		
@@ -30,7 +33,8 @@ public class Broadcasts {
 			}
 		}
 	}
-    public Set<Broadcast> getSet(){
+    public List<Broadcast> getList(){
+
         return broadcasts;
     }
 	
