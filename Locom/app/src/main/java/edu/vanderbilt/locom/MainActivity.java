@@ -466,15 +466,6 @@ public class MainActivity extends ActionBarActivity
         super.onStop();
     }
 
-    // takes you back to homescreen
-    public void backHome() {
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, HomeScreenFragment.newInstance(1))
-                        .commit();
-
-    }
 
     /**
      * A placeholder fragment containing a simple view.
@@ -536,6 +527,7 @@ public class MainActivity extends ActionBarActivity
         TextView timeEntry;
         TextView tags;
         TextView tag1;
+        Button backHome;
         View rootV;
 
         Broadcast currentBroadcast;
@@ -579,6 +571,7 @@ public class MainActivity extends ActionBarActivity
             timeEntry = (TextView) rootView.findViewById(R.id.timeEntry);
             tags = (TextView) rootView.findViewById(R.id.tags);
             tag1 = (TextView) rootView.findViewById(R.id.tag1);
+            backHome = (Button) rootView.findViewById(R.id.backHome);
 
             currentBroadcast = broadcasts.getList().get(num);
 
@@ -606,6 +599,21 @@ public class MainActivity extends ActionBarActivity
                 allTags += "\n" + tagsArr[i];
                 tag1.setText(allTags);
             }
+
+            // button to get back to homescreen
+            backHome.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, HomeScreenFragment.newInstance(1))
+                            .commit();
+
+                }
+            });
+
+
 
             return rootView;
         }
@@ -768,6 +776,11 @@ public class MainActivity extends ActionBarActivity
                     System.out.println(jsonStr);
 
                     send(jsonStr);
+
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, HomeScreenFragment.newInstance(1))
+                            .commit();
                 }
             });
 
@@ -1006,6 +1019,11 @@ public class MainActivity extends ActionBarActivity
                     System.out.println(jsonStr);
 
                     send(jsonStr);
+
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, HomeScreenFragment.newInstance(1))
+                            .commit();
                 }
             });
 
