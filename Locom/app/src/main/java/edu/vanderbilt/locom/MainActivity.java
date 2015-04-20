@@ -916,7 +916,12 @@ public class MainActivity extends ActionBarActivity
 
     public static class tagsFragment extends Fragment {
 
-        RadioButton rb;
+        CheckBox foodCheck;
+        CheckBox musicCheck;
+        CheckBox puppiesCheck;
+        CheckBox otherCheck;
+        TextView otherEntry;
+        Button sendTags;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -944,14 +949,56 @@ public class MainActivity extends ActionBarActivity
 
             View rootView = inflater.inflate(R.layout.fragment_tags, container, false);
 
-            rb = (RadioButton) rootView.findViewById(R.id.radioButton1);
 
-            rb.setOnClickListener(new View.OnClickListener() {
+            foodCheck = (CheckBox) rootView.findViewById(R.id.food);
+            musicCheck = (CheckBox) rootView.findViewById(R.id.music);
+            puppiesCheck = (CheckBox) rootView.findViewById(R.id.puppies);
+            otherCheck = (CheckBox) rootView.findViewById(R.id.other);
+            otherEntry = (TextView) rootView.findViewById(R.id.otherEntry);
+            sendTags = (Button) rootView.findViewById(R.id.sendTags);
+
+            sendTags.setOnClickListener(new View.OnClickListener() {
+
                 @Override
-                public void onClick(View view) {
-                    Log.i(TAG, "radio button pressed");
+                public void onClick(View v) {
+
+                    List<String> interestList = new ArrayList();
+                    if (foodCheck.isChecked()) {
+                        interestList.add("food");
+                    }
+                    if (puppiesCheck.isChecked()) {
+                        interestList.add("puppies");
+                    }
+                    if (musicCheck.isChecked()) {
+                        interestList.add("music");
+                    }
+                    if (otherCheck.isChecked()) {
+                        if (otherEntry.getText().toString() != "") {
+                            interestList.add(otherEntry.getText().toString());
+                        } else {
+                            Toast.makeText(getActivity(),
+                                    "No 'other' listed", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    String[] strArr = new String[interestList.size()];
+                    strArr = interestList.toArray(strArr);
+                    InterestTags tags = new InterestTags(strArr);
+
+                    user.setTags(tags);
+
+                    Gson gson = new Gson();
+
+                    LocomGSON LOCOMmsg = new LocomGSON("update", null, user);
+
+                    String jsonStr = gson.toJson(LOCOMmsg);
+
+                    System.out.println(jsonStr);
+
+                    send(jsonStr);
                 }
             });
+
             return rootView;
 
         }

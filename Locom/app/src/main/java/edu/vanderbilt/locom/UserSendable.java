@@ -17,8 +17,12 @@ public class UserSendable {
     	this.tags = u.tags;
     }
 
-    public double distanceToBroadcast(Broadcast bcast){
+    public float distanceToBroadcast(Broadcast bcast){
 
         return locomLocation.getDistance(bcast.getLocomLocation());
+    }
+
+    public void setTags(InterestTags newtags){
+        this.tags = newtags;
     }
 }
