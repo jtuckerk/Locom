@@ -875,7 +875,7 @@ public class MainActivity extends ActionBarActivity
                     user = new UserSendable(name, new LocomLocation(mLongitude, mLatitude), tags);
 
                     Gson gson = new Gson();
-                    
+
                     LocomGSON LOCOMmsg = new LocomGSON("connect", null, user);
 
                     String jsonStr = gson.toJson(LOCOMmsg);

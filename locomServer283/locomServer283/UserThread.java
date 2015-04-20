@@ -37,7 +37,7 @@ public class UserThread extends Thread {
 		System.out.println("Userthread created: " + this.getId());
 
 		this.user = new User("Unset", new LocomLocation(1.1, 1.1), new InterestTags(defaultInterest), outStream);
-
+		this.user.send("hello");
 	}
 
 	@Override
