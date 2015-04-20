@@ -937,13 +937,13 @@ public class MainActivity extends ActionBarActivity
                 bCastArray.add(i.next().getTitle());
             }
 
-            String[] strArr = new String[bCastArray.size()];
-            strArr = bCastArray.toArray(strArr);
+            //String[] strArr = new String[bCastArray.size()];
+          //  strArr = bCastArray.toArray(strArr);
             bCastList.setAdapter(new ArrayAdapter<String>(
                     getActivity(),
                     android.R.layout.simple_list_item_activated_1,
                     android.R.id.text1,
-                    strArr));
+                    bCastArray));//strArr));
 
             // find UI elements defined in xml
             rootV = rootView;
