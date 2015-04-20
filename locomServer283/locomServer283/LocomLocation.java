@@ -24,8 +24,9 @@ public class LocomLocation {
 	
 	public double getDistance(LocomLocation locomLocation){
 		 	double result;
+		 	
 	        result = distance( latitude, longitude, locomLocation.latitude,locomLocation.longitude, 0.0, 0.0);
-			
+			System.out.println("distance Calculated as: " + result);
 			return result;
 	}
 	/*
