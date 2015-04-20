@@ -25,8 +25,12 @@ public class LocomLocation {
 	public float getDistance(LocomLocation locomLocation){
 
         float[] results = {0,0,0};
-        android.location.Location.distanceBetween( latitude, longitude, locomLocation.latitude, locomLocation.longitude, results);
-		
+        try {
+            android.location.Location.distanceBetween(latitude, longitude, locomLocation.latitude, locomLocation.longitude, results);
+        }
+        catch (IllegalArgumentException e){
+            results[0] = 0;
+        }
 		return results[0];
 	}
 

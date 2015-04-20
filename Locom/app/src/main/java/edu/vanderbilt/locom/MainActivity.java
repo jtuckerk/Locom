@@ -338,7 +338,7 @@ public class MainActivity extends ActionBarActivity
                 LocomGSON message = gson.fromJson(msg, LocomGSON.class);
                 if (message.type == null) {
                     message.type = "";
-                } else if (message.type == "broadcast") {
+                } else if (message.type.equals("broadcast")) {
                     Toast.makeText(getApplicationContext(), "Incoming Broadcast: " + message.broadcast.getTitle(), Toast.LENGTH_SHORT).show();
                     broadcasts.add(message.broadcast);
                 } else {
@@ -708,12 +708,12 @@ public class MainActivity extends ActionBarActivity
                     String radStr = radius.getText().toString();
                     Log.i(TAG, "radStr=" +radStr);
                     int rad = 500;
-                    if (radStr == "" || name == "" || description == ""){
+                    if (radStr.equals("") || name.equals( "") || description.equals("")){
                         Toast.makeText(getActivity(),
                                 "Incomplete Fields", Toast.LENGTH_SHORT).show();
                         properBroadcast = false;
                     }
-                    if (radStr == "" || radStr == null || radius.getText().length() == 0){
+                    if (radStr.equals( "") || radStr == null || radius.getText().length() == 0){
                         Toast.makeText(getActivity(),
                                 "Incomplete Fields", Toast.LENGTH_SHORT).show();
                         properBroadcast = false;
@@ -724,8 +724,8 @@ public class MainActivity extends ActionBarActivity
 
                     double longitude = mLongitude;
                     double latitude = mLatitude;
-                    if (!currentLocation.isChecked() && longEntry.getText().toString() != ""
-                            && latEntry.getText().toString() != ""){
+                    if (!currentLocation.isChecked() && !longEntry.getText().toString().equals("")
+                            && !latEntry.getText().toString().equals("")){
                         longitude = Double.parseDouble(longEntry.getText().toString());
                         latitude = Double.parseDouble(latEntry.getText().toString());
                     }
@@ -751,7 +751,7 @@ public class MainActivity extends ActionBarActivity
                         interestList.add("music");
                     }
                     if (otherCheck.isChecked()) {
-                        if (otherEntry.getText().toString() != "") {
+                        if (!otherEntry.getText().toString().equals("")) {
                             interestList.add(otherEntry.getText().toString());
                         } else {
                             Toast.makeText(getActivity(),
@@ -864,8 +864,8 @@ public class MainActivity extends ActionBarActivity
                     String name;
                     name = etName.getText().toString();
 
-                    if (demoLocation.isChecked() && latEntry.getText().toString() != "" &&
-                            longEntry.getText().toString() != ""){
+                    if (demoLocation.isChecked() && !latEntry.getText().toString().equals("") &&
+                            !longEntry.getText().toString().equals("")){
                         mLatitude = Double.parseDouble(latEntry.getText().toString());
                         mLongitude = Double.parseDouble(longEntry.getText().toString());
                     }
@@ -1021,7 +1021,7 @@ public class MainActivity extends ActionBarActivity
                         interestList.add("music");
                     }
                     if (otherCheck.isChecked()) {
-                        if (otherEntry.getText().toString() != "") {
+                        if (!otherEntry.getText().toString().equals("")) {
                             interestList.add(otherEntry.getText().toString());
                         } else {
                             Toast.makeText(getActivity(),
