@@ -3,12 +3,22 @@
 
     <string name="title_section1">Home</string>
     <string name="title_section2">Tags</string>
-    <string name="title_section3">Send Broadcast</string>
+    <string name="title_section3">Create Broadcast</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_example">Example action</string>
+    <string name="action_example"></string>
 
     <string name="action_settings">Settings</string>
+
+    <string-array
+        name="testStrings">
+        <item
+            >text_string1</item>
+        <item
+            >text_string2</item>
+        <item
+            >text_string3</item>
+    </string-array>
 </resources>

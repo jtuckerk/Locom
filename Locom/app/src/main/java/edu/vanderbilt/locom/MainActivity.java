@@ -363,7 +363,7 @@ public class MainActivity extends ActionBarActivity
                 }
                 // make sure that we close the output, not the input
                 if (out != null) {
-                    out.print("BYE");
+                    //out.print("BYE");
                     out.flush();
                     out.close();
                 }
@@ -927,12 +927,16 @@ public class MainActivity extends ActionBarActivity
             List<String> bCastArray = new ArrayList<String>();
 
             for (Iterator<Broadcast> i = broadcasts.getList().iterator(); i.hasNext(); ) {
-
+                Log.i(TAG, "adding element to bcastlist");
                 bCastArray.add(i.next().getTitle());
             }
 
             String[] strArr = new String[bCastArray.size()];
             strArr = bCastArray.toArray(strArr);
+            //bCastList.addHeaderView(rootView.findViewById(R.id.textView15));
+
+            ViewGroup header = (ViewGroup)inflater.inflate(R.layout.misc, bCastList, false);
+            bCastList.addHeaderView(header, null, false);
             bCastList.setAdapter(new ArrayAdapter<String>(
                     getActivity(),
                     android.R.layout.simple_list_item_activated_1,

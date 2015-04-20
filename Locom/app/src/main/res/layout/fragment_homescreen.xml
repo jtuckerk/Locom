@@ -105,7 +105,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/bCastListView"
             android:layout_marginTop="80dp"
-            android:layout_marginBottom="80dp" />
+            android:layout_marginBottom="80dp"
+            android:entries="@array/testStrings"/>
 
         <Button
             android:layout_width="match_parent"
