@@ -50,8 +50,7 @@ public class UserThread extends Thread {
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
 			this.user.outStream = this.outStream;
-	    	//outStream.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-	    	//outStream.flush();
+
 			
 			String line;
 			if (LocomServer.shutdown) {
@@ -128,9 +127,7 @@ public class UserThread extends Thread {
 			connect(message.user);
 			break;
 		case "update":
-			this.outStream.println("hello, update received before");
 			update(message.user);
-			this.user.send("hello, update received after");
 			break;
 		case "broadcast":
 			broadcast(message.broadcast, msg);
