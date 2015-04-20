@@ -18,9 +18,10 @@ public class InterestTags {
 		return this.tags.contains(singleTag);	
 	}
 	
-	public Boolean hasInterests(String[] tags){
+	public Boolean hasInterests(InterestTags tags){
 		
-		for (String tag: tags){
+		String[] tagArray = tags.tags.toArray(new String[tags.tags.size()]);
+		for (String tag: tagArray){
 			if (this.tags.contains(tag)){
 				return true;
 			}

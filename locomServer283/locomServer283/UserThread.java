@@ -162,7 +162,7 @@ public class UserThread extends Thread {
 		}
 		
 		for (User u: this.AppUsers.users){
-			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius())){
+			if (u.inRange(receivedcast.getLocation(), receivedcast.getRadius()) && u.isInterested(receivedcast.getTags())){
 				u.send(msg);
 			}
 		}

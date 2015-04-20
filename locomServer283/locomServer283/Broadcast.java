@@ -12,8 +12,9 @@ public class Broadcast {
 	private static Date sentDate;
 	private Date eventDate;
 	private Date timeoutDate;
+	private InterestTags tags;
 	
-	public Broadcast(String title, String message, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate, Date timeoutDate){
+	public Broadcast(String title, String message, InterestTags tags, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate, Date timeoutDate){
 		this.title = title;
 		this.message = message;
 		this.locomLocation = locomLocation;
@@ -21,9 +22,10 @@ public class Broadcast {
 		this.sentDate = sentDate;
 		this.eventDate = eventDate;
 		this.timeoutDate = timeoutDate;
+		this.tags = tags;
 	}
-	public Broadcast(String title, String message, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate){
-		this(title, message, locomLocation, radius, eventDate, sentDate, defaultTimeout(sentDate));
+	public Broadcast(String title, String message, InterestTags tags, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate){
+		this(title, message, tags, locomLocation, radius, eventDate, sentDate, defaultTimeout(sentDate));
 	}
 	private static Date defaultTimeout(Date sendDate){
 		
@@ -43,5 +45,8 @@ public class Broadcast {
 	}
 	public double getRadius(){
 		return this.radius;
+	}
+	public InterestTags getTags(){
+		return tags;
 	}
 }
