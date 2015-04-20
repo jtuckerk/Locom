@@ -508,6 +508,33 @@ public class MainActivity extends ActionBarActivity
          * The fragment argument representing the section number for this
          * fragment.
          */
+
+        // declare all UI elems
+        //todo: dsfsgdsgdgsdgsdgs
+        TextView eventName;
+        TextView eventNameEntry;
+        TextView distance;
+        TextView distanceEntry;
+        TextView meters;
+        TextView description;
+        TextView descriptionEntry;
+        TextView eventDate;
+        TextView eventDateEntry;
+        TextView time;
+        TextView timeEntry;
+        TextView tags;
+        TextView tag1;
+        TextView tag2;
+        TextView tag3;
+        TextView tag4;
+        TextView location;
+        TextView locationEntry;
+        View rootV;
+
+        Broadcast currentBroadcast;
+
+        static int num  = 0;
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         /**
@@ -515,6 +542,7 @@ public class MainActivity extends ActionBarActivity
          * number.
          */
         public static BroadcastViewFragment newInstance(int listNum) {
+            num = listNum;
             BroadcastViewFragment fragment = new BroadcastViewFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, listNum);
@@ -529,6 +557,81 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_broadcastview, container, false);
+            rootV = rootView;
+
+            eventName = (TextView) rootView.findViewById(R.id.eventName);
+            eventNameEntry= (TextView) rootView.findViewById(R.id.eventNameEntry);
+            distance = (TextView) rootView.findViewById(R.id.distance);
+            distanceEntry = (TextView) rootView.findViewById(R.id.distanceEntry);
+            meters = (TextView) rootView.findViewById(R.id.meters);
+            description = (TextView) rootView.findViewById(R.id.description);
+            descriptionEntry = (TextView) rootView.findViewById(R.id.descriptionEntry);
+            eventDate = (TextView) rootView.findViewById(R.id.eventDate);
+            eventDateEntry = (TextView) rootView.findViewById(R.id.eventDateEntry);
+            time = (TextView) rootView.findViewById(R.id.time);
+            timeEntry = (TextView) rootView.findViewById(R.id.timeEntry);
+            tags = (TextView) rootView.findViewById(R.id.tags);
+            tag1 = (TextView) rootView.findViewById(R.id.tag1);
+            tag2 = (TextView) rootView.findViewById(R.id.tag2);
+            tag3 = (TextView) rootView.findViewById(R.id.tag3);
+            tag4 = (TextView) rootView.findViewById(R.id.tag4);
+            location = (TextView) rootView.findViewById(R.id.location);
+            locationEntry = (TextView) rootView.findViewById(R.id.locationEntry);
+
+            currentBroadcast = broadcasts.getList().get(num);
+            currentBroadcast.getEventDate(); //incldues date and time
+            currentBroadcast.getLocation();
+            currentBroadcast.getMessageBody();
+            currentBroadcast.getTitle();
+            //currentBroadcast.getTags(); //include all tags
+           // currentBroadcast.getDistance(); - usersendable, distance to broadcast
+
+/*
+                    String name = titleEntry.getText().toString();
+                    String description = descriptionEntry.getText().toString();
+                    int day = dPicker.getDayOfMonth();
+                    int month = dPicker.getMonth();
+                    int year = dPicker.getYear();
+                    int hour = tPicker.getCurrentHour();
+                    int minute = tPicker.getCurrentMinute();
+                    int second = 0;
+
+                    int rad = Integer.parseInt(radius.getText().toString());
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(year,month,day,hour,minute,second);
+
+                    Date eventDate = cal.getTime();
+
+                    Date sentDate = new Date();
+
+                    edu.vanderbilt.locom.Location loc = new edu.vanderbilt.locom.Location(mLongitude, mLatitude);
+                    currentBroadcast = new Broadcast(name, description, loc , rad, sentDate, eventDate );
+
+                    // send gson connect message with username and lat/long
+                    String[] tag = {};
+                    InterestTags tags = new InterestTags(tag);
+                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags, null);
+
+                    Gson gson = new Gson();
+
+                    UserSendable us = new UserSendable(u);
+
+                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, us);
+
+                    String jsonStr = gson.toJson(LOCOMmsg);
+
+                    System.out.println(jsonStr);
+
+                    send(jsonStr);
+                }
+            });
+
+            Calendar cal = Calendar.getInstance();
+            Date date = new Date();
+
+*/
+
             return rootView;
         }
 
