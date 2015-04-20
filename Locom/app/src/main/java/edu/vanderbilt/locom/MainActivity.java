@@ -854,7 +854,7 @@ public class MainActivity extends ActionBarActivity
             latEntry = (TextView) rootView.findViewById(R.id.LatEntryLogin);
             demoLocation = (CheckBox) rootView.findViewById(R.id.custLoc);
 
-            /*
+
             bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id)
@@ -867,7 +867,7 @@ public class MainActivity extends ActionBarActivity
 
                 }
             });
-            */
+
 
 
             // assign OnClickListener to user login
@@ -919,7 +919,7 @@ public class MainActivity extends ActionBarActivity
 
                 }
             });
-
+/*
             bCastList = (ListView) inflater.inflate(
                     R.layout.fragment_navigation_drawer, container, false);
             bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -931,7 +931,7 @@ public class MainActivity extends ActionBarActivity
                             .replace(R.id.container, BroadcastViewFragment.newInstance(position))
                             .commit();
                 }
-            });
+            });*/
 
             List<String> bCastArray = new ArrayList<String>();
 
@@ -945,8 +945,6 @@ public class MainActivity extends ActionBarActivity
             strArr = bCastArray.toArray(strArr);
             //bCastList.addHeaderView(rootView.findViewById(R.id.textView15));
 
-            ViewGroup header = (ViewGroup)inflater.inflate(R.layout.misc, bCastList, false);
-            bCastList.addHeaderView(header, null, false);
 
             //String[] strArr = new String[bCastArray.size()];
           //  strArr = bCastArray.toArray(strArr);
