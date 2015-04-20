@@ -1,5 +1,7 @@
 package edu.vanderbilt.locom;
 
+import java.util.Set;
+
 public class Location {
 
 	private double longitude, latitude;
@@ -29,6 +31,9 @@ public class Location {
 		
 		return results[0];
 	}
-	
+    public double getLat(){
+        return this.latitude;
+    }
+    public double getLong() { return this.longitude;}
 	
 }

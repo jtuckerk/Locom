@@ -27,4 +27,11 @@ public class InterestTags {
 		}
 		return false;
 	}
+    public int getSize(){
+        return tags.size();
+    }
+
+    public Set<String> getTags(){
+        return this.tags;
+    }
 }

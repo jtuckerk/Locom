@@ -514,7 +514,6 @@ public class MainActivity extends ActionBarActivity
          */
 
         // declare all UI elems
-        //todo: dsfsgdsgdgsdgsdgs
         TextView eventName;
         TextView eventNameEntry;
         TextView distance;
@@ -528,11 +527,6 @@ public class MainActivity extends ActionBarActivity
         TextView timeEntry;
         TextView tags;
         TextView tag1;
-        TextView tag2;
-        TextView tag3;
-        TextView tag4;
-        TextView location;
-        TextView locationEntry;
         View rootV;
 
         Broadcast currentBroadcast;
@@ -576,65 +570,33 @@ public class MainActivity extends ActionBarActivity
             timeEntry = (TextView) rootView.findViewById(R.id.timeEntry);
             tags = (TextView) rootView.findViewById(R.id.tags);
             tag1 = (TextView) rootView.findViewById(R.id.tag1);
-            tag2 = (TextView) rootView.findViewById(R.id.tag2);
-            tag3 = (TextView) rootView.findViewById(R.id.tag3);
-            tag4 = (TextView) rootView.findViewById(R.id.tag4);
-            location = (TextView) rootView.findViewById(R.id.location);
-            locationEntry = (TextView) rootView.findViewById(R.id.locationEntry);
 
             currentBroadcast = broadcasts.getList().get(num);
-            currentBroadcast.getEventDate(); //incldues date and time
-            currentBroadcast.getLocation();
-            currentBroadcast.getMessageBody();
-            currentBroadcast.getTitle();
-            //currentBroadcast.getTags(); //include all tags
-           // currentBroadcast.getDistance(); - usersendable, distance to broadcast
 
-/*
-                    String name = titleEntry.getText().toString();
-                    String description = descriptionEntry.getText().toString();
-                    int day = dPicker.getDayOfMonth();
-                    int month = dPicker.getMonth();
-                    int year = dPicker.getYear();
-                    int hour = tPicker.getCurrentHour();
-                    int minute = tPicker.getCurrentMinute();
-                    int second = 0;
+            // entry title and description
+            descriptionEntry.setText(currentBroadcast.getMessageBody());
+            eventNameEntry.setText(currentBroadcast.getTitle());
 
-                    int rad = Integer.parseInt(radius.getText().toString());
+            // date and time
+            Date event = currentBroadcast.getEventDate();
+            String eventString = event.toString();
+            String[] parts = eventString.split(" ");
+            timeEntry.setText(parts[2]);
+            eventDateEntry.setText(parts[0]+ " " + parts[1]);
 
-                    Calendar cal = Calendar.getInstance();
-                    cal.set(year,month,day,hour,minute,second);
+            // distance from event
+            Float dist = user.distanceToBroadcast(currentBroadcast);
+            distanceEntry.setText(dist.toString());
 
-                    Date eventDate = cal.getTime();
-
-                    Date sentDate = new Date();
-
-                    edu.vanderbilt.locom.Location loc = new edu.vanderbilt.locom.Location(mLongitude, mLatitude);
-                    currentBroadcast = new Broadcast(name, description, loc , rad, sentDate, eventDate );
-
-                    // send gson connect message with username and lat/long
-                    String[] tag = {};
-                    InterestTags tags = new InterestTags(tag);
-                    User u = new User(name, new edu.vanderbilt.locom.Location(mLongitude, mLatitude), tags, null);
-
-                    Gson gson = new Gson();
-
-                    UserSendable us = new UserSendable(u);
-
-                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, us);
-
-                    String jsonStr = gson.toJson(LOCOMmsg);
-
-                    System.out.println(jsonStr);
-
-                    send(jsonStr);
-                }
-            });
-
-            Calendar cal = Calendar.getInstance();
-            Date date = new Date();
-
-*/
+            // tags
+            InterestTags itags = currentBroadcast.getTags();
+            String[] tagsArr = new String[itags.getSize()];
+            tagsArr = itags.getTags().toArray(tagsArr);
+            String allTags = "";
+            for(int i = 0; i < itags.getSize(); i++) {
+                allTags += "\n" + tagsArr[i];
+                tag1.setText(allTags);
+            }
 
             return rootView;
         }
