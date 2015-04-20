@@ -33,13 +33,11 @@ public class UserThread extends Thread {
 		this.AppUsers = users;
 		this.broadcasts = broadcasts;
 		String[] defaultInterest = {"Locom"};
-
+		
 		System.out.println("Userthread created: " + this.getId());
 
 		this.user = new User("Unset", new LocomLocation(1.1, 1.1), new InterestTags(defaultInterest), outStream);
-    	outStream.println("sdgsdfd");
-    	outStream.flush();
-		this.user.send("hello");
+
 	}
 
 	@Override
@@ -51,6 +49,9 @@ public class UserThread extends Thread {
 			this.inStream = new BufferedReader(new InputStreamReader(
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
+	    	outStream.println("sdgsdfd");
+	    	outStream.flush();
+			this.user.send("hello");
 			String line;
 			if (LocomServer.shutdown) {
 				this.outStream.println("Bank is Closed");
