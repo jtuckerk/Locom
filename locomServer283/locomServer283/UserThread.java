@@ -49,8 +49,8 @@ public class UserThread extends Thread {
 			this.inStream = new BufferedReader(new InputStreamReader(
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
-	    	outStream.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-	    	outStream.flush();
+	    	//outStream.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+	    	//outStream.flush();
 			
 			String line;
 			if (LocomServer.shutdown) {
