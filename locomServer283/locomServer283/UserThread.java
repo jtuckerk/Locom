@@ -14,10 +14,10 @@ public class UserThread extends Thread {
 
 	private Socket s;
 
-	// contains structure holding all connected users
+	// contains shared structure holding all connected users
 	private Users AppUsers;
 
-	// structure containing all past broadcasts that haven't timed out.
+	// shared structure containing all past broadcasts that haven't timed out.
 	private Broadcasts broadcasts;
 
 	// contains the user information for the user connected to this thread
@@ -30,12 +30,14 @@ public class UserThread extends Thread {
 	private PrintWriter outStream;
 	public UserThread(Socket s, Users users, Broadcasts broadcasts) {
 		this.s = s;
+		
 		this.AppUsers = users;
 		this.broadcasts = broadcasts;
 		String[] defaultInterest = {"Locom"};
 		
 		System.out.println("Userthread created: " + this.getId());
 
+		//sets random user info until the user logs in
 		this.user = new User("Unset", new LocomLocation(1.1, 1.1), new InterestTags(defaultInterest), outStream);
 
 	}
@@ -59,40 +61,8 @@ public class UserThread extends Thread {
 			} else {
 
 				while ((line = inStream.readLine()) != null) {
-					if (line.equals("SHUTDOWN")
-							&& s.getInetAddress().isLoopbackAddress()) {
-						LocomServer.shutdown = true;
-						System.out.println("Shutdown request received");
-						// System.out.println("Shutdown request received");
-						//outStream.flush();
-						LocomServer.threads.remove(this);
-						Iterator<UserThread> it = LocomServer.threads
-								.iterator();
-						while (it.hasNext()) {
-
-							try {
-								it.next().join();
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
-						}
-						// jumps out of read while loop and allows thread to
-						// close
-						// the socket and die
-						
-						break;
-
-					} else {
-						// handle requests
-						
-						
+					//handles message - no error checking - hope for the best
 						messageHandle(line);
-						//StringTokenizer tokens = new StringTokenizer(line);
-						//outStream.println(message = parseRequest(tokens));
-						//System.out.println(message);
-
-					}
-					outStream.flush();
 				}
 			}
 
@@ -107,6 +77,7 @@ public class UserThread extends Thread {
 			}
 		}
 
+		//removes the user when they disconnect
 		synchronized(this.AppUsers){
 			this.AppUsers.removeUser(this.user);
 		}
@@ -115,12 +86,17 @@ public class UserThread extends Thread {
 
 	public void messageHandle(String msg){
 		Gson gson = new Gson();
+		//prints raw JSON
 		System.out.println("raw message received: "+ msg);
 		
+		//sets message to empty string if not formatted properly -
+		// prints error and avoids exception
 		LocomGSON message = gson.fromJson(msg, LocomGSON.class);
 		if (message.type == null){
 			message.type = "";
 		}
+		
+		//Dispatches to the different functions for handling each type of message
 		switch (message.type){
 		case "connect":
 			System.out.println("received connect");
@@ -137,7 +113,7 @@ public class UserThread extends Thread {
 		}
 		
 	}
-	
+	//handles connect message
 	public void connect(UserSendable connectUser){
 		System.out.println("connecting user: " );
 		this.user = new User(connectUser.userName, connectUser.locomLocation, connectUser.tags, this.user.outStream);
@@ -147,6 +123,8 @@ public class UserThread extends Thread {
 		}
 		
 	}
+	
+	//handles update message
 	public void update(UserSendable upUser){
 		System.out.println("updating user: " );
 		
@@ -157,6 +135,9 @@ public class UserThread extends Thread {
 		
 		
 	}
+	
+	//handles broadcast message by adding broadcast to shared broadcasts set 
+	//and forwarding to the users in range and interested in the broadcasts
 	public void broadcast(Broadcast receivedcast, String msg){
 		System.out.println("broadcast recieved " );
 		

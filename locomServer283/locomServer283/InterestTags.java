@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+
+//class to hold a set of interests a user has and provide a simple 
+// interface for checking whether a user has matching interest of a broadcast
 public class InterestTags {
 
 	private Set<String> tags = new HashSet<String>();

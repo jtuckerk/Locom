@@ -1,5 +1,8 @@
 package locomServer283;
 
+//Simple location abstraction for longitude and latitude
+//provides a function to find the distance between locations
+//
 public class LocomLocation {
 
 	private double longitude, latitude;

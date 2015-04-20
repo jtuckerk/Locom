@@ -7,6 +7,7 @@ import java.net.Socket;
 
 import com.google.gson.Gson;
 
+//simple test to test server
 public class ServerTest {
 	static final String SERVER_ADDRESS = "52.11.228.217";
 	public static final int PORT = 2000;

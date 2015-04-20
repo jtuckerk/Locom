@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 
+//Main server thread - waits for user connection and starts new user threads 
 public class LocomServer {
 
 	public static volatile boolean shutdown = false;
