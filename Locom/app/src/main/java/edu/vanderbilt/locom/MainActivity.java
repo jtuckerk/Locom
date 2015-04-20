@@ -132,6 +132,7 @@ public class MainActivity extends ActionBarActivity
                 .build();
     }
 
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -533,7 +534,7 @@ public class MainActivity extends ActionBarActivity
 
         Broadcast currentBroadcast;
 
-        static int num  = 0;
+        static int num = 0;
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -560,7 +561,7 @@ public class MainActivity extends ActionBarActivity
             rootV = rootView;
 
             eventName = (TextView) rootView.findViewById(R.id.eventName);
-            eventNameEntry= (TextView) rootView.findViewById(R.id.eventNameEntry);
+            eventNameEntry = (TextView) rootView.findViewById(R.id.eventNameEntry);
             distance = (TextView) rootView.findViewById(R.id.distance);
             distanceEntry = (TextView) rootView.findViewById(R.id.distanceEntry);
             meters = (TextView) rootView.findViewById(R.id.meters);
@@ -585,7 +586,7 @@ public class MainActivity extends ActionBarActivity
             String eventString = event.toString();
             String[] parts = eventString.split(" ");
             timeEntry.setText(parts[2]);
-            eventDateEntry.setText(parts[0]+ " " + parts[1]);
+            eventDateEntry.setText(parts[0] + " " + parts[1]);
 
             // distance from event
             Float dist = user.distanceToBroadcast(currentBroadcast);
@@ -596,7 +597,7 @@ public class MainActivity extends ActionBarActivity
             String[] tagsArr = new String[itags.getSize()];
             tagsArr = itags.getTags().toArray(tagsArr);
             String allTags = "";
-            for(int i = 0; i < itags.getSize(); i++) {
+            for (int i = 0; i < itags.getSize(); i++) {
                 allTags += "\n" + tagsArr[i];
                 tag1.setText(allTags);
             }
@@ -613,7 +614,6 @@ public class MainActivity extends ActionBarActivity
 
                 }
             });
-
 
 
             return rootView;
@@ -706,26 +706,25 @@ public class MainActivity extends ActionBarActivity
                     boolean properBroadcast = true;
 
                     String radStr = radius.getText().toString();
-                    Log.i(TAG, "radStr=" +radStr);
+                    Log.i(TAG, "radStr=" + radStr);
                     int rad = 500;
-                    if (radStr.equals("") || name.equals( "") || description.equals("")){
+                    if (radStr.equals("") || name.equals("") || description.equals("")) {
                         Toast.makeText(getActivity(),
                                 "Incomplete Fields", Toast.LENGTH_SHORT).show();
                         properBroadcast = false;
                     }
-                    if (radStr.equals( "") || radStr == null || radius.getText().length() == 0){
+                    if (radStr.equals("") || radStr == null || radius.getText().length() == 0) {
                         Toast.makeText(getActivity(),
                                 "Incomplete Fields", Toast.LENGTH_SHORT).show();
                         properBroadcast = false;
-                    }
-                    else {
+                    } else {
                         rad = Integer.parseInt(radStr);
                     }
 
                     double longitude = mLongitude;
                     double latitude = mLatitude;
                     if (!currentLocation.isChecked() && !longEntry.getText().toString().equals("")
-                            && !latEntry.getText().toString().equals("")){
+                            && !latEntry.getText().toString().equals("")) {
                         longitude = Double.parseDouble(longEntry.getText().toString());
                         latitude = Double.parseDouble(latEntry.getText().toString());
                     }
@@ -769,7 +768,7 @@ public class MainActivity extends ActionBarActivity
                     String[] strArr = new String[interestList.size()];
                     strArr = interestList.toArray(strArr);
                     InterestTags tags = new InterestTags(strArr);
-                            currentBroadcast = new Broadcast(name, description, tags, loc, rad, sentDate, eventDate);
+                    currentBroadcast = new Broadcast(name, description, tags, loc, rad, sentDate, eventDate);
 
                     // send gson broadcast
                     Gson gson = new Gson();
@@ -852,6 +851,20 @@ public class MainActivity extends ActionBarActivity
             latEntry = (TextView) rootView.findViewById(R.id.LatEntryLogin);
             demoLocation = (CheckBox) rootView.findViewById(R.id.custLoc);
 
+            bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id)
+
+                {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, BroadcastViewFragment.newInstance(position))
+                            .commit();
+
+                }
+            });
+
+
             // assign OnClickListener to user login
             bConnect.setOnClickListener(new View.OnClickListener() {
 
@@ -865,7 +878,7 @@ public class MainActivity extends ActionBarActivity
                     name = etName.getText().toString();
 
                     if (demoLocation.isChecked() && !latEntry.getText().toString().equals("") &&
-                            !longEntry.getText().toString().equals("")){
+                            !longEntry.getText().toString().equals("")) {
                         mLatitude = Double.parseDouble(latEntry.getText().toString());
                         mLongitude = Double.parseDouble(longEntry.getText().toString());
                     }
@@ -875,7 +888,7 @@ public class MainActivity extends ActionBarActivity
                     user = new UserSendable(name, new LocomLocation(mLongitude, mLatitude), tags);
 
                     Gson gson = new Gson();
-                    
+
                     LocomGSON LOCOMmsg = new LocomGSON("connect", null, user);
 
                     String jsonStr = gson.toJson(LOCOMmsg);
@@ -929,13 +942,12 @@ public class MainActivity extends ActionBarActivity
             // find UI elements defined in xml
             rootV = rootView;
 
-            if (hasLoggedIn){
+            if (hasLoggedIn) {
                 hideUserLogin();
-            }
-            else{
+            } else {
                 homeView.setVisibility(View.GONE);
             }
-            
+
             return rootView;
         }
 
@@ -943,6 +955,7 @@ public class MainActivity extends ActionBarActivity
             Toast.makeText(getActivity(),
                     "List Item " + pos + " selected", Toast.LENGTH_SHORT).show();
         }
+
 
         @Override
         public void onAttach(Activity activity) {
@@ -958,6 +971,7 @@ public class MainActivity extends ActionBarActivity
             }
 
         }
+
     }
 
     public static class tagsFragment extends Fragment {
