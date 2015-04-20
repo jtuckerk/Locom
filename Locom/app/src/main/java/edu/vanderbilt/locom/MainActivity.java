@@ -100,7 +100,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    static private CharSequence mTitle;
     private int ConnectButton;
 
     @Override
@@ -585,8 +585,8 @@ public class MainActivity extends ActionBarActivity
             Date event = currentBroadcast.getEventDate();
             String eventString = event.toString();
             String[] parts = eventString.split(" ");
-            timeEntry.setText(parts[2]);
-            eventDateEntry.setText(parts[0] + " " + parts[1]);
+            timeEntry.setText(parts[3]);
+            eventDateEntry.setText(parts[0] + " " + parts[1] + " " + parts[2]);
 
             // distance from event
             Float dist = user.distanceToBroadcast(currentBroadcast);
@@ -611,6 +611,8 @@ public class MainActivity extends ActionBarActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
                             .commit();
+
+                    mTitle = getString(R.string.title_section1);
 
                 }
             });
@@ -782,6 +784,7 @@ public class MainActivity extends ActionBarActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
                             .commit();
+                    mTitle = getString(R.string.title_section1);
                 }
             });
 
@@ -851,6 +854,7 @@ public class MainActivity extends ActionBarActivity
             latEntry = (TextView) rootView.findViewById(R.id.LatEntryLogin);
             demoLocation = (CheckBox) rootView.findViewById(R.id.custLoc);
 
+            /*
             bCastList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id)
@@ -863,6 +867,7 @@ public class MainActivity extends ActionBarActivity
 
                 }
             });
+            */
 
 
             // assign OnClickListener to user login
@@ -921,6 +926,10 @@ public class MainActivity extends ActionBarActivity
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     selectBCast(position);
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, BroadcastViewFragment.newInstance(position))
+                            .commit();
                 }
             });
 
@@ -931,17 +940,22 @@ public class MainActivity extends ActionBarActivity
                 bCastArray.add(i.next().getTitle());
             }
 
+
             String[] strArr = new String[bCastArray.size()];
             strArr = bCastArray.toArray(strArr);
             //bCastList.addHeaderView(rootView.findViewById(R.id.textView15));
 
             ViewGroup header = (ViewGroup)inflater.inflate(R.layout.misc, bCastList, false);
             bCastList.addHeaderView(header, null, false);
+
+            //String[] strArr = new String[bCastArray.size()];
+          //  strArr = bCastArray.toArray(strArr);
+
             bCastList.setAdapter(new ArrayAdapter<String>(
                     getActivity(),
                     android.R.layout.simple_list_item_activated_1,
-                    android.R.id.text1,
-                    strArr));
+                    //android.R.id.text1,
+                    bCastArray));//strArr));
 
             // find UI elements defined in xml
             rootV = rootView;
@@ -1065,6 +1079,7 @@ public class MainActivity extends ActionBarActivity
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, HomeScreenFragment.newInstance(1))
                             .commit();
+                    mTitle = getString(R.string.title_section1);
                 }
             });
 
