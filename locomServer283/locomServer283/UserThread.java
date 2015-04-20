@@ -49,6 +49,7 @@ public class UserThread extends Thread {
 			this.inStream = new BufferedReader(new InputStreamReader(
 					s.getInputStream()));
 			this.outStream = new PrintWriter(s.getOutputStream());
+			this.user.outStream = this.outStream;
 	    	//outStream.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
 	    	//outStream.flush();
 			
@@ -127,7 +128,7 @@ public class UserThread extends Thread {
 			connect(message.user);
 			break;
 		case "update":
-			this.user.send("hello, update received before");
+			this.outStream.println("hello, update received before");
 			update(message.user);
 			this.user.send("hello, update received after");
 			break;
