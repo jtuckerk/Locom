@@ -872,13 +872,11 @@ public class MainActivity extends ActionBarActivity
                     // send gson connect message with username and lat/long
                     String[] tag = {};
                     InterestTags tags = new InterestTags(tag);
-                    User u = new User(name, new LocomLocation(mLongitude, mLatitude), tags, null);
+                    user = new UserSendable(name, new LocomLocation(mLongitude, mLatitude), tags);
 
                     Gson gson = new Gson();
-
-                    UserSendable us = new UserSendable(u);
-
-                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, us);
+                    
+                    LocomGSON LOCOMmsg = new LocomGSON("connect", null, user);
 
                     String jsonStr = gson.toJson(LOCOMmsg);
 
