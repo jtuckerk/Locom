@@ -149,13 +149,15 @@
                 android:text=""
                 android:id="@+id/tag1" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Back to Home"
+                android:id="@+id/backHome" />
+
         </LinearLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="Back to Home"
-            android:id="@+id/backHome" />
+
     </ScrollView>
 
 </RelativeLayout>
