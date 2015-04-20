@@ -64,7 +64,7 @@ public class UserThread extends Thread {
 						LocomServer.shutdown = true;
 						System.out.println("Shutdown request received");
 						// System.out.println("Shutdown request received");
-						outStream.flush();
+						//outStream.flush();
 						LocomServer.threads.remove(this);
 						Iterator<UserThread> it = LocomServer.threads
 								.iterator();
@@ -79,10 +79,7 @@ public class UserThread extends Thread {
 						// jumps out of read while loop and allows thread to
 						// close
 						// the socket and die
-						outStream.println();
-						System.out.println();
-						outStream.flush();
-						System.out.flush();
+						
 						break;
 
 					} else {
