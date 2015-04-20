@@ -1,5 +1,6 @@
 package locomServer283;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,12 +19,12 @@ public class InterestTags {
 		return this.tags.contains(singleTag);	
 	}
 	
-	public Boolean hasInterests(InterestTags tags){
+	public Boolean hasInterests(InterestTags tagsCheck){
 		
-		String[] tagArray = tags.tags.toArray(new String[tags.tags.size()]);
+		String[] tagArray = tagsCheck.getTagsSet().toArray(new String[tagsCheck.getTagsSet().size()]);
 		
 		System.out.println("checking interests");
-		System.out.println("interests: "+ tagArray.toString());
+		System.out.println("interests: "+ Arrays.toString(tagArray));
 		for (String tag: tagArray){
 			System.out.println("iterating through tags: " + tag);
 			if (this.tags.contains(tag)){
@@ -31,5 +32,8 @@ public class InterestTags {
 			}
 		}
 		return false;
+	}
+	public Set<String> getTagsSet(){
+		return this.tags;
 	}
 }
