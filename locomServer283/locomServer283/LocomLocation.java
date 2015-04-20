@@ -22,11 +22,11 @@ public class LocomLocation {
 		 return (this.getDistance(locomLocation) < Radius);
 	}
 	
-	public double getDistance(LocomLocation locomLocation){
+	public double getDistance(LocomLocation loc){
 		 	double result;
 		 	
-	        result = distance( latitude, longitude, locomLocation.latitude,locomLocation.longitude, 0.0, 0.0);
-			System.out.println("distance Calculated as: " + result);
+	        result = distance( latitude, loc.latitude, longitude,loc.longitude, 0.0, 0.0);
+			System.out.println("distance between (" + latitude +"," + longitude +")and("+ loc.latitude +"," + loc.longitude+ ") "+  " Calculated as: " + result);
 			return result;
 	}
 	/*
@@ -40,7 +40,7 @@ public class LocomLocation {
 	private double distance(double lat1, double lat2, double lon1, double lon2,
 	        double el1, double el2) {
 
-	    final int R = 6371; // Radius of the earth
+	    final int R = 6371; // Radius of the earth in km
 
 	    Double latDistance = deg2rad(lat2 - lat1);
 	    Double lonDistance = deg2rad(lon2 - lon1);

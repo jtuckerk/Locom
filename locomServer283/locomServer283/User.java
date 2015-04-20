@@ -15,8 +15,6 @@ public class User {
 	this.locomLocation = locomLocation;
 	this.tags = tags;
 	this.outStream = outStream;
-	
-	System.out.println("User Created: " + this.getuserName());
     }
     
     public String getuserName(){
