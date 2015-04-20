@@ -29,6 +29,8 @@ public class User {
     public Boolean isInterested(InterestTags tags){
     	
     	//returns true if any tags match else returns false
+    	System.out.println("inside is interested");
+    	this.tags.printUserInterests();
     	return this.tags.hasInterests(tags);
     }
     public void send(String msg){
