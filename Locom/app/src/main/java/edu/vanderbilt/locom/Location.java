@@ -2,6 +2,8 @@ package edu.vanderbilt.locom;
 
 import java.util.Set;
 
+//Simple location abstraction for longitude and latitude
+//provides a function to find the distance between locations
 public class Location {
 
 	private double longitude, latitude;

@@ -3,6 +3,7 @@ package edu.vanderbilt.locom;
 import java.util.HashSet;
 import java.util.Set;
 
+//not used on front end
 public class Users {
 
 	public Set<User> users = new HashSet<User>();

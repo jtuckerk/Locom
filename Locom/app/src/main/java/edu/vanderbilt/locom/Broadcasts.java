@@ -6,15 +6,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+//object to be held by user  to contain all broadcasts
+//received that have not timed out.This will be used to populate the users list on the
+// home screen
 public class Broadcasts {
 
 	private List<Broadcast> broadcasts = new ArrayList<>();
 
 	
 	public Broadcasts(){
-		
-		//Broadcast welcomeBroadcast = new Broadcast("Welcome", "You are now connected", new Date(), new Date());
-		//this.broadcasts.add(welcomeBroadcast);
+		Broadcast welcomeBroadcast = new Broadcast("Welcome", "You are now connected",
+                new InterestTags(new String[]{}),
+                new LocomLocation(0.0, 0.0),
+                50000.0,
+                new Date(), new Date());
+		this.broadcasts.add(welcomeBroadcast);
 	}
 	
 	public void add(Broadcast broadcast){

@@ -4,16 +4,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+// A class to represent all information related to a broadcast
 public class Broadcast {
 
-	private String title;
-	private String message;
-	private LocomLocation locomLocation;
-	private Double radius;
-	private static Date sentDate;
-	private Date eventDate;
-	private Date timeoutDate;
-    private InterestTags tags;
+    private String title;					//event title
+    private String message;					//event description info
+    private LocomLocation locomLocation;	//simple location of broadcast/event
+    private Double radius;					//radius the broadcast should reach
+    private static Date sentDate;			//date event is broadcast
+    private Date eventDate;					//date event is scheduled
+    private Date timeoutDate;				//date event gets removed from the server and from a users list
+    private InterestTags tags;				//tags corresponding to the event
 	
 	public Broadcast(String title, String message, InterestTags tags, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate, Date timeoutDate){
 		this.title = title;
@@ -28,6 +29,8 @@ public class Broadcast {
 	public Broadcast(String title, String message, InterestTags tags, LocomLocation locomLocation, double radius, Date eventDate, Date sentDate){
 		this(title, message, tags, locomLocation, radius, eventDate, sentDate, defaultTimeout(sentDate));
 	}
+
+    //used in the alternate constructor to set a default timeout of 3 days from the sent date
 	private static Date defaultTimeout(Date sentDate){
 		Calendar cal = new GregorianCalendar();
 	    //Calendar cal = Calendar.getInstance(); // creates calendar
