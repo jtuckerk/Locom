@@ -511,6 +511,27 @@ public class MainActivity extends ActionBarActivity
          * The fragment argument representing the section number for this
          * fragment.
          */
+
+        // declare all UI elems
+        TextView eventName;
+        TextView eventNameEntry;
+        TextView distance;
+        TextView distanceEntry;
+        TextView meters;
+        TextView description;
+        TextView descriptionEntry;
+        TextView eventDate;
+        TextView eventDateEntry;
+        TextView time;
+        TextView timeEntry;
+        TextView tags;
+        TextView tag1;
+        View rootV;
+
+        Broadcast currentBroadcast;
+
+        static int num  = 0;
+
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         /**
@@ -518,6 +539,7 @@ public class MainActivity extends ActionBarActivity
          * number.
          */
         public static BroadcastViewFragment newInstance(int listNum) {
+            num = listNum;
             BroadcastViewFragment fragment = new BroadcastViewFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, listNum);
@@ -532,6 +554,49 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_broadcastview, container, false);
+            rootV = rootView;
+
+            eventName = (TextView) rootView.findViewById(R.id.eventName);
+            eventNameEntry= (TextView) rootView.findViewById(R.id.eventNameEntry);
+            distance = (TextView) rootView.findViewById(R.id.distance);
+            distanceEntry = (TextView) rootView.findViewById(R.id.distanceEntry);
+            meters = (TextView) rootView.findViewById(R.id.meters);
+            description = (TextView) rootView.findViewById(R.id.description);
+            descriptionEntry = (TextView) rootView.findViewById(R.id.descriptionEntry);
+            eventDate = (TextView) rootView.findViewById(R.id.eventDate);
+            eventDateEntry = (TextView) rootView.findViewById(R.id.eventDateEntry);
+            time = (TextView) rootView.findViewById(R.id.time);
+            timeEntry = (TextView) rootView.findViewById(R.id.timeEntry);
+            tags = (TextView) rootView.findViewById(R.id.tags);
+            tag1 = (TextView) rootView.findViewById(R.id.tag1);
+
+            currentBroadcast = broadcasts.getList().get(num);
+
+            // entry title and description
+            descriptionEntry.setText(currentBroadcast.getMessageBody());
+            eventNameEntry.setText(currentBroadcast.getTitle());
+
+            // date and time
+            Date event = currentBroadcast.getEventDate();
+            String eventString = event.toString();
+            String[] parts = eventString.split(" ");
+            timeEntry.setText(parts[2]);
+            eventDateEntry.setText(parts[0]+ " " + parts[1]);
+
+            // distance from event
+            Float dist = user.distanceToBroadcast(currentBroadcast);
+            distanceEntry.setText(dist.toString());
+
+            // tags
+            InterestTags itags = currentBroadcast.getTags();
+            String[] tagsArr = new String[itags.getSize()];
+            tagsArr = itags.getTags().toArray(tagsArr);
+            String allTags = "";
+            for(int i = 0; i < itags.getSize(); i++) {
+                allTags += "\n" + tagsArr[i];
+                tag1.setText(allTags);
+            }
+
             return rootView;
         }
 
